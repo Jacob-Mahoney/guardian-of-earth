@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Guardian of Earth</string>
+    <string name="loading_text">LOADING...</string>
 </resources>
