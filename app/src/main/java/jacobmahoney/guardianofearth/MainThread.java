@@ -22,8 +22,41 @@ public class MainThread extends Thread {
         this.gamePanel = gamePanel;
     }
 
+
+
+
+
+
+
+
     @Override
     public void run() {
+
+        int TICKS_PER_SECOND = 50;
+        int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+        int MAX_FRAMESKIP = 10;
+
+        long next_game_tick = System.currentTimeMillis();
+        int loops;
+
+        while(running) {
+
+            canvas = this.surfaceHolder.lockCanvas();
+            loops = 0;
+
+            while( System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
+                this.gamePanel.update();
+                next_game_tick += SKIP_TICKS;
+                loops++;
+            }
+
+            this.gamePanel.draw(canvas);
+
+            surfaceHolder.unlockCanvasAndPost(canvas);
+
+        }
+
+        /*
         long startTime;
         long timeMillis = 1000/MAX_FPS;
         long waitTime;
@@ -72,6 +105,8 @@ public class MainThread extends Thread {
             }
 
         }
+        */
+
     }
 
 }
