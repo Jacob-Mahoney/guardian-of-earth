@@ -5,23 +5,42 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
     private TestObject rect;
     private Point point;
+    private int screenWidth;
+    private int screenHeight;
 
     public GamePanel(Context context) {
+
         super(context);
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
-        rect = new TestObject(new Rect(100, 100, 200, 200), Color.RED);
+        rect = new TestObject(new Rect(100, 100, 200, 200), Color.WHITE);
         point = new Point(150, 150);
+
+        getScreenSize(context);
+
+    }
+
+    public void getScreenSize(Context context) {
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+
     }
 
     @Override
@@ -39,7 +58,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
-        while(retry) {
+        while (retry) {
             try {
                 thread.setRunning(false);
                 thread.join();
@@ -62,13 +81,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
-        rect.update(point);
+        rect.update(screenWidth, screenHeight);
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(Color.BLUE);
         rect.draw(canvas);
     }
 

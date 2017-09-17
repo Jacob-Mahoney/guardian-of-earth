@@ -39,19 +39,18 @@ public class MainThread extends Thread {
         long next_game_tick = System.currentTimeMillis();
         int loops;
 
-        while(running) {
+        while (running) {
 
-            canvas = this.surfaceHolder.lockCanvas();
             loops = 0;
 
-            while( System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
+            while (System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
                 this.gamePanel.update();
                 next_game_tick += SKIP_TICKS;
                 loops++;
             }
 
+            canvas = this.surfaceHolder.lockCanvas();
             this.gamePanel.draw(canvas);
-
             surfaceHolder.unlockCanvasAndPost(canvas);
 
         }

@@ -2,7 +2,6 @@ package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 
 public class TestObject implements GameObject {
@@ -22,9 +21,8 @@ public class TestObject implements GameObject {
         canvas.drawRect(rectangle, paint);
     }
 
-    @Override
-    public void update(Point point) {
-        rectangle.set(point.x - rectangle.width()/2, point.y - rectangle.height()/2, point.x + rectangle.width()/2, point.y + rectangle.height()/2);
+    public void update(int w, int h) {
+        rectangle.set(w/2 - rectangle.width()/2, h/2 - rectangle.height()/2, w/2 + rectangle.width()/2, h/2 + rectangle.height()/2);
     }
 
 }

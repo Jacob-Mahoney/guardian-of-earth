@@ -6,6 +6,6 @@ import android.graphics.Point;
 public interface GameObject {
 
     public void draw(Canvas canvs);
-    public void update(Point point);
+    //public void update(Point point);
 
 }
