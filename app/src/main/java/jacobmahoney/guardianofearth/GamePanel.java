@@ -15,6 +15,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
     private TestObject rect;
+    private TestObject rect2;
+    private TestObject rect3;
     private Point point;
     private int screenWidth;
     private int screenHeight;
@@ -25,7 +27,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
-        rect = new TestObject(new Rect(100, 100, 200, 200), Color.WHITE);
+        rect = new TestObject(new Rect(0, 0, 100, 100), 2);
+        rect2 = new TestObject(new Rect(0, 100, 100, 200), 4);
+        rect3 = new TestObject(new Rect(0, 200, 100, 300), 8);
         point = new Point(150, 150);
 
         getScreenSize(context);
@@ -81,7 +85,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
-        rect.update(screenWidth, screenHeight);
+        rect.update(screenWidth);
+        rect2.update(screenWidth);
+        rect3.update(screenWidth);
     }
 
     @Override
@@ -89,6 +95,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         canvas.drawColor(Color.BLUE);
         rect.draw(canvas);
+        rect2.draw(canvas);
+        rect3.draw(canvas);
     }
 
 }

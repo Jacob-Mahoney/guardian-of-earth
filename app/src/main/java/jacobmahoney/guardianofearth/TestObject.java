@@ -1,17 +1,27 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.constraint.solver.widgets.Rectangle;
 
 public class TestObject implements GameObject {
 
     private Rect rectangle;
+    private Rect rectangleReset;
     private int color;
+    private int speed;
 
-    public TestObject(Rect rectangle, int color) {
-        this.rectangle = rectangle;
-        this.color = color;
+    public TestObject(Rect rect, int speed) {
+        this.rectangle = new Rect(rect);
+        this.rectangleReset = new Rect(rect);
+        this.color = Color.WHITE;
+        this.speed = speed;
+    }
+
+    public void reset() {
+        rectangle.set(rectangleReset);
     }
 
     @Override
@@ -21,8 +31,12 @@ public class TestObject implements GameObject {
         canvas.drawRect(rectangle, paint);
     }
 
-    public void update(int w, int h) {
-        rectangle.set(w/2 - rectangle.width()/2, h/2 - rectangle.height()/2, w/2 + rectangle.width()/2, h/2 + rectangle.height()/2);
+    public void update(int screenWidth) {
+        if (rectangle.right + speed > screenWidth) {
+            reset();
+        } else {
+            rectangle.offset(speed, 0);
+        }
     }
 
 }
