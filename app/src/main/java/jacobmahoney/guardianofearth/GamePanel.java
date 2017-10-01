@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,10 +13,9 @@ import android.view.WindowManager;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
-    private TestObject rect;
-    private TestObject rect2;
-    private TestObject rect3;
-    private Point point;
+    private SpaceshipObject spaceship;
+    private LeftCircle leftCircle;
+    private RightCircle rightCircle;
     private int screenWidth;
     private int screenHeight;
 
@@ -27,12 +25,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
-        rect = new TestObject(new Rect(0, 0, 100, 100), 2);
-        rect2 = new TestObject(new Rect(0, 100, 100, 200), 4);
-        rect3 = new TestObject(new Rect(0, 200, 100, 300), 8);
-        point = new Point(150, 150);
-
         getScreenSize(context);
+        spaceship = new SpaceshipObject(screenWidth, screenHeight);
+        leftCircle = new LeftCircle(screenWidth, screenHeight);
+        rightCircle = new RightCircle(screenWidth, screenHeight);
 
     }
 
@@ -77,26 +73,37 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                point.set((int)event.getX(), (int)event.getY());
+                if (leftCircle.contains(event.getX(), event.getY())) {
+                    leftCircle.active();
+                }
+                if (rightCircle.contains(event.getX(), event.getY())) {
+                    rightCircle.active();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (leftCircle.contains(event.getX(), event.getY())) {
+                    leftCircle.inactive();
+                }
+                if (rightCircle.contains(event.getX(), event.getY())) {
+                    rightCircle.inactive();
+                }
+                break;
         }
         return true;
         //return super.onTouchEvent(event);
     }
 
     public void update() {
-        rect.update(screenWidth);
-        rect2.update(screenWidth);
-        rect3.update(screenWidth);
+
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(Color.BLUE);
-        rect.draw(canvas);
-        rect2.draw(canvas);
-        rect3.draw(canvas);
+        spaceship.draw(canvas);
+        leftCircle.draw(canvas);
+        rightCircle.draw(canvas);
     }
 
 }
