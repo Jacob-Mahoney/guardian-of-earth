@@ -4,9 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.Log;
 
 public class RightCircle implements GameObject {
 
@@ -23,6 +21,7 @@ public class RightCircle implements GameObject {
     private boolean active;
 
     public RightCircle(int screenWidth, int screenHeight) {
+
         active = false;
         path = new Path();
         paint = new Paint();
@@ -32,6 +31,7 @@ public class RightCircle implements GameObject {
         top = 0;
         right = screenWidth + (0.25*screenWidth);
         bottom = screenHeight;
+
     }
 
     public void active() {
@@ -51,23 +51,26 @@ public class RightCircle implements GameObject {
 
     }
 
-    public void update(boolean active) {
+    public void update() {
+
+        RectF oval = new RectF((float)left, (float)top, (float)right, (float)bottom);
+        path.reset();
+        path.arcTo(oval, 90, 180, true);
+        path.close();
+
+        if (active) {
+            paint.setColor(Color.GREEN);
+        } else {
+            paint.setColor(Color.BLUE);
+        }
+
+        paint.setStyle(Paint.Style.FILL);
 
     }
 
     public void draw(Canvas canvas) {
 
-        if (active) {
-
-            RectF oval = new RectF((float)left, (float)top, (float)right, (float)bottom);
-            path.arcTo(oval, 90, 180, true);
-
-            paint.setColor(Color.GREEN);
-            paint.setStyle(Paint.Style.FILL);
-
-            canvas.drawPath(path, paint);
-
-        }
+        canvas.drawPath(path, paint);
 
     }
 

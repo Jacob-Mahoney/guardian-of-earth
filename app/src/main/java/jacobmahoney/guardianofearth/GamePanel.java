@@ -13,17 +13,16 @@ import android.view.WindowManager;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
+    private int screenWidth;
+    private int screenHeight;
     private SpaceshipObject spaceship;
     private LeftCircle leftCircle;
     private RightCircle rightCircle;
-    private int screenWidth;
-    private int screenHeight;
 
     public GamePanel(Context context) {
 
         super(context);
         getHolder().addCallback(this);
-        thread = new MainThread(getHolder(), this);
         setFocusable(true);
         getScreenSize(context);
         spaceship = new SpaceshipObject(screenWidth, screenHeight);
@@ -74,17 +73,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (leftCircle.contains(event.getX(), event.getY())) {
+                    spaceship.rotateLeft();
                     leftCircle.active();
                 }
                 if (rightCircle.contains(event.getX(), event.getY())) {
+                    spaceship.rotateRight();
                     rightCircle.active();
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 if (leftCircle.contains(event.getX(), event.getY())) {
+                    spaceship.rotateStop();
                     leftCircle.inactive();
                 }
                 if (rightCircle.contains(event.getX(), event.getY())) {
+                    spaceship.rotateStop();
                     rightCircle.inactive();
                 }
                 break;
@@ -95,15 +98,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
 
+        spaceship.update();
+        leftCircle.update();
+        rightCircle.update();
+
     }
 
     @Override
     public void draw(Canvas canvas) {
+
         super.draw(canvas);
         canvas.drawColor(Color.BLUE);
+
         spaceship.draw(canvas);
         leftCircle.draw(canvas);
         rightCircle.draw(canvas);
+
     }
 
 }

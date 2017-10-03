@@ -1,12 +1,11 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
 
-    public static final int MAX_FPS = 30;
-    private double averageFPS;
     private SurfaceHolder surfaceHolder;
     private GamePanel gamePanel;
     private boolean running;
@@ -18,16 +17,10 @@ public class MainThread extends Thread {
 
     public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
+        Log.d("MainThread", "here");
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
     }
-
-
-
-
-
-
-
 
     @Override
     public void run() {
@@ -39,7 +32,12 @@ public class MainThread extends Thread {
         long next_game_tick = System.currentTimeMillis();
         int loops;
 
+        long prev = System.currentTimeMillis();
+
         while (running) {
+
+            Log.d("MainThread", "" + (System.currentTimeMillis() - prev)); // this value drastically increases over time
+            prev = System.currentTimeMillis();
 
             loops = 0;
 
@@ -56,51 +54,33 @@ public class MainThread extends Thread {
         }
 
         /*
-        long startTime;
-        long timeMillis = 1000/MAX_FPS;
-        long waitTime;
-        int frameCount = 0;
-        long totalTime = 0;
-        long targetTime = 1000/MAX_FPS;
-        while(running) {
-            startTime = System.nanoTime();
-            canvas = null;
+        int FRAMES_PER_SECOND = 25;
+        int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 
-            try {
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
-                    this.gamePanel.update();
-                    this.gamePanel.draw(canvas);
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (canvas != null) {
-                    try {
-                        surfaceHolder.unlockCanvasAndPost(canvas);
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        long next_game_tick = System.currentTimeMillis();
+        long sleep_time;
 
-            timeMillis = (System.nanoTime() - startTime)/1000000;
-            waitTime = targetTime - timeMillis;
-            try {
-                if (waitTime > 0) {
-                    this.sleep(waitTime);
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
+        long prev = System.currentTimeMillis();
 
-            totalTime += System.nanoTime() - startTime;
-            frameCount++;
-            if (frameCount == MAX_FPS) {
-                averageFPS = 1000/((totalTime/frameCount)/1000000);
-                frameCount = 0;
-                totalTime = 0;
-                System.out.println(averageFPS);
+        while (running) {
+
+            Log.d("MainThread", "" + (System.currentTimeMillis() - prev)); // this value drastically increases over time
+            prev = System.currentTimeMillis();
+
+            this.gamePanel.update();
+            canvas = this.surfaceHolder.lockCanvas(null);
+            this.gamePanel.draw(canvas);
+            surfaceHolder.unlockCanvasAndPost(canvas);
+
+            next_game_tick += SKIP_TICKS;
+            sleep_time = next_game_tick - System.currentTimeMillis();
+
+            if (sleep_time >= 0) {
+                try {
+                    sleep(sleep_time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
