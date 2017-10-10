@@ -10,10 +10,10 @@ public class RightCircle implements GameObject {
 
     private Path path;
     private Paint paint;
-    private double left;
-    private double top;
-    private double right;
-    private double bottom;
+    private float left;
+    private float top;
+    private float right;
+    private float bottom;
 
     private int screenWidth;
     private int screenHeight;
@@ -27,9 +27,9 @@ public class RightCircle implements GameObject {
         paint = new Paint();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        left = 0.75*screenWidth;
+        left = (float)0.75*screenWidth;
         top = 0;
-        right = screenWidth + (0.25*screenWidth);
+        right = (float)(screenWidth + (0.25*screenWidth));
         bottom = screenHeight;
 
     }
@@ -53,15 +53,17 @@ public class RightCircle implements GameObject {
 
     public void update() {
 
-        RectF oval = new RectF((float)left, (float)top, (float)right, (float)bottom);
+        RectF oval = new RectF(left, top, right, bottom);
         path.reset();
         path.arcTo(oval, 90, 180, true);
         path.close();
 
+        paint.setColor(Color.WHITE);
+
         if (active) {
-            paint.setColor(Color.GREEN);
+            paint.setAlpha(50);
         } else {
-            paint.setColor(Color.BLUE);
+            paint.setAlpha(0);
         }
 
         paint.setStyle(Paint.Style.FILL);

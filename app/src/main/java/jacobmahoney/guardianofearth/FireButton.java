@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-public class LeftCircle implements GameObject {
+public class FireButton implements GameObject {
 
     private Path path;
     private Paint paint;
@@ -20,17 +20,17 @@ public class LeftCircle implements GameObject {
 
     private boolean active;
 
-    public LeftCircle(int screenWidth, int screenHeight) {
+    public FireButton(int screenWidth, int screenHeight) {
 
         active = false;
         path = new Path();
         paint = new Paint();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        left = (float)-(0.25*screenWidth);
-        top = 0;
-        right = (float)0.25*screenWidth;
-        bottom = screenHeight;
+        left = screenWidth/4;
+        top = 3*screenHeight/4;
+        right = 3*screenWidth/4;
+        bottom = screenHeight-50;
 
     }
 
@@ -44,10 +44,11 @@ public class LeftCircle implements GameObject {
 
     public boolean contains(float x, float y) {
 
-        double left = Math.pow(x, 2) + Math.pow(y - 0.5*screenHeight, 2);
-        double right = Math.pow(0.25*screenWidth, 2);
+        if (x > left && x < right && y > top && y < bottom) {
+            return true;
+        }
 
-        return (left < right);
+        return false;
 
     }
 
@@ -61,7 +62,7 @@ public class LeftCircle implements GameObject {
         paint.setColor(Color.WHITE);
 
         if (active) {
-            paint.setAlpha(50);
+            paint.setAlpha(25);
         } else {
             paint.setAlpha(0);
         }
@@ -72,7 +73,8 @@ public class LeftCircle implements GameObject {
 
     public void draw(Canvas canvas) {
 
-        canvas.drawPath(path, paint);
+        //canvas.drawPath(path, paint);
+        canvas.drawRect(left, top, right, bottom, paint);
 
     }
 

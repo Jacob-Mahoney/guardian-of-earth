@@ -18,6 +18,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private SpaceshipObject spaceship;
     private LeftCircle leftCircle;
     private RightCircle rightCircle;
+    private FireButton fireButton;
 
     public GamePanel(Context context) {
 
@@ -28,6 +29,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         spaceship = new SpaceshipObject(screenWidth, screenHeight);
         leftCircle = new LeftCircle(screenWidth, screenHeight);
         rightCircle = new RightCircle(screenWidth, screenHeight);
+        fireButton = new FireButton(screenWidth, screenHeight);
 
     }
 
@@ -80,6 +82,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     spaceship.rotateRight();
                     rightCircle.active();
                 }
+                if (fireButton.contains(event.getX(), event.getY())) {
+                    fireButton.active();
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 if (leftCircle.contains(event.getX(), event.getY())) {
@@ -89,6 +94,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 if (rightCircle.contains(event.getX(), event.getY())) {
                     spaceship.rotateStop();
                     rightCircle.inactive();
+                }
+                if (fireButton.contains(event.getX(), event.getY())) {
+                    fireButton.inactive();
                 }
                 break;
         }
@@ -101,6 +109,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         spaceship.update();
         leftCircle.update();
         rightCircle.update();
+        fireButton.update();
 
     }
 
@@ -108,11 +117,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
 
         super.draw(canvas);
-        canvas.drawColor(Color.BLUE);
+        //canvas.drawColor(Color.BLACK);
 
         spaceship.draw(canvas);
         leftCircle.draw(canvas);
         rightCircle.draw(canvas);
+        fireButton.draw(canvas);
 
     }
 
