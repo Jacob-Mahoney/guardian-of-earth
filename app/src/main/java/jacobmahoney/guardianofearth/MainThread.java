@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
@@ -17,7 +16,6 @@ public class MainThread extends Thread {
 
     public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
-        Log.d("MainThread", "here");
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
     }
@@ -32,12 +30,7 @@ public class MainThread extends Thread {
         long next_game_tick = System.currentTimeMillis();
         int loops;
 
-        long prev = System.currentTimeMillis();
-
         while (running) {
-
-            Log.d("MainThread", "" + (System.currentTimeMillis() - prev)); // this value drastically increases over time
-            prev = System.currentTimeMillis();
 
             loops = 0;
 
@@ -47,44 +40,13 @@ public class MainThread extends Thread {
                 loops++;
             }
 
-            canvas = this.surfaceHolder.lockCanvas();
-            this.gamePanel.draw(canvas);
-            surfaceHolder.unlockCanvasAndPost(canvas);
-
-        }
-
-        /*
-        int FRAMES_PER_SECOND = 25;
-        int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-
-        long next_game_tick = System.currentTimeMillis();
-        long sleep_time;
-
-        long prev = System.currentTimeMillis();
-
-        while (running) {
-
-            Log.d("MainThread", "" + (System.currentTimeMillis() - prev)); // this value drastically increases over time
-            prev = System.currentTimeMillis();
-
-            this.gamePanel.update();
-            canvas = this.surfaceHolder.lockCanvas(null);
-            this.gamePanel.draw(canvas);
-            surfaceHolder.unlockCanvasAndPost(canvas);
-
-            next_game_tick += SKIP_TICKS;
-            sleep_time = next_game_tick - System.currentTimeMillis();
-
-            if (sleep_time >= 0) {
-                try {
-                    sleep(sleep_time);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            if (surfaceHolder.getSurface().isValid()) {
+                canvas = this.surfaceHolder.lockCanvas();
+                this.gamePanel.draw(canvas);
+                surfaceHolder.unlockCanvasAndPost(canvas);
             }
 
         }
-        */
 
     }
 

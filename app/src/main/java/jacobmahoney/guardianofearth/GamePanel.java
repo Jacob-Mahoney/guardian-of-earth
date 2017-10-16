@@ -2,7 +2,6 @@ package jacobmahoney.guardianofearth;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -19,6 +18,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private LeftCircle leftCircle;
     private RightCircle rightCircle;
     private FireButton fireButton;
+    private ParticleEmitter emitter;
 
     public GamePanel(Context context) {
 
@@ -30,6 +30,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         leftCircle = new LeftCircle(screenWidth, screenHeight);
         rightCircle = new RightCircle(screenWidth, screenHeight);
         fireButton = new FireButton(screenWidth, screenHeight);
+        emitter = new ParticleEmitter(screenWidth, screenHeight);
 
     }
 
@@ -70,6 +71,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    // make particle emitter and particle classes
+    // particle emitter has function to add a particle to the emitter and the emitter will animate it with the update and draw functinos
+    // particle emitter has a list or something of all the particles to loop through to draw and update
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -84,6 +89,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if (fireButton.contains(event.getX(), event.getY())) {
                     fireButton.active();
+                    emitter.addParticle(new Particle(screenWidth/2, screenHeight-100, -2, -2));
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -110,6 +116,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         leftCircle.update();
         rightCircle.update();
         fireButton.update();
+        emitter.update();
 
     }
 
@@ -117,12 +124,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
 
         super.draw(canvas);
-        //canvas.drawColor(Color.BLACK);
 
         spaceship.draw(canvas);
         leftCircle.draw(canvas);
         rightCircle.draw(canvas);
         fireButton.draw(canvas);
+        emitter.draw(canvas);
 
     }
 

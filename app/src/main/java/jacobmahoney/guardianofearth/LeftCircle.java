@@ -70,6 +70,7 @@ public class LeftCircle implements GameObject {
 
     }
 
+    @Override
     public void draw(Canvas canvas) {
 
         canvas.drawPath(path, paint);

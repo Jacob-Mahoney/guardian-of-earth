@@ -71,9 +71,9 @@ public class FireButton implements GameObject {
 
     }
 
+    @Override
     public void draw(Canvas canvas) {
 
-        //canvas.drawPath(path, paint);
         canvas.drawRect(left, top, right, bottom, paint);
 
     }
