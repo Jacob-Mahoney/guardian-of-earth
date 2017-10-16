@@ -89,7 +89,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if (fireButton.contains(event.getX(), event.getY())) {
                     fireButton.active();
-                    emitter.addParticle(new Particle(screenWidth/2, screenHeight-100, -2, -2));
+                    spaceship.fire(emitter);
                 }
                 break;
             case MotionEvent.ACTION_UP:

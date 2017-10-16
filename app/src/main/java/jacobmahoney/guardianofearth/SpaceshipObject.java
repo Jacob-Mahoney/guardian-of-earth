@@ -41,6 +41,11 @@ public class SpaceshipObject implements GameObject {
         status = Status.NOT_ROTATING;
     }
 
+    public void fire(ParticleEmitter emitter) {
+        double rot = 90 - rotation;
+        emitter.addParticle(new Particle(b.x, b.y, (int)(5*Math.cos(Math.toRadians(rot))), -(int)(5*Math.sin(Math.toRadians(rot)))));
+    }
+
     public void update() {
 
         if (status == Status.ROTATING_LEFT) {
