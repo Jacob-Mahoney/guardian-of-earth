@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ParticleEmitter implements GameObject {
 
-    List<Particle> list = new LinkedList<Particle>();
+    List<Particle> list = new LinkedList<>();
     private Paint paint;
     private int screenWidth, screenHeight;
 
@@ -26,6 +26,7 @@ public class ParticleEmitter implements GameObject {
         list.add(p);
     }
 
+    @Override
     public void update() {
 
         for (int i = 0; i < list.size(); i++) {

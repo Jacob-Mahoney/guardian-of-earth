@@ -42,15 +42,19 @@ public class SpaceshipObject implements GameObject {
         status = Status.NOT_ROTATING;
     }
 
-    public void fire(ParticleEmitter emitter) {
-
-        double rot = 90 - rotation;
-        Point p = rotateAboutPoint(nose, pivot, Math.toRadians(rotation));
-
-        emitter.addParticle(new Particle(p.x, p.y, (int)(15*Math.cos(Math.toRadians(rot))), -(int)(15*Math.sin(Math.toRadians(rot)))));
-
+    public int getRotation() {
+        return rotation;
     }
 
+    public Point getNosePoint() {
+        return nose;
+    }
+
+    public Point getPivotPoint() {
+        return pivot;
+    }
+
+    @Override
     public void update() {
 
         if (status == Status.ROTATING_LEFT) {
@@ -72,20 +76,6 @@ public class SpaceshipObject implements GameObject {
 
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
-
-    }
-
-    private Point rotateAboutPoint(Point point, Point pivot, double angle) {
-
-        Point p = new Point();
-
-        double x = Math.cos(Math.toRadians(rotation)) * (point.x - pivot.x) - Math.sin(Math.toRadians(rotation)) * (point.y - pivot.y) + pivot.x;
-        double y = Math.sin(Math.toRadians(rotation)) * (point.x - pivot.x) + Math.cos(Math.toRadians(rotation)) * (point.y - pivot.y) + pivot.y;
-
-        p.x = (int)x;
-        p.y = (int)y;
-
-        return p;
 
     }
 

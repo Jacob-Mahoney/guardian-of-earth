@@ -3,6 +3,7 @@ package jacobmahoney.guardianofearth;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,12 +15,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private int screenWidth;
     private int screenHeight;
-    private SpaceshipObject spaceship;
-    private LeftCircle leftCircle;
-    private RightCircle rightCircle;
-    private FireButton fireButton;
-    private ParticleEmitter emitter;
-    private MeteorContainer meteorContainer;
+    private GameHolder gameHolder;
 
     public GamePanel(Context context) {
 
@@ -27,12 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         setFocusable(true);
         getScreenSize(context);
-        spaceship = new SpaceshipObject(screenWidth, screenHeight);
-        leftCircle = new LeftCircle(screenWidth, screenHeight);
-        rightCircle = new RightCircle(screenWidth, screenHeight);
-        fireButton = new FireButton(screenWidth, screenHeight);
-        emitter = new ParticleEmitter(screenWidth, screenHeight);
-        meteorContainer = new MeteorContainer(screenWidth, screenHeight, emitter);
+        gameHolder = new GameHolder(screenWidth, screenHeight);
 
     }
 
@@ -73,53 +64,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    // make particle emitter and particle classes
-    // particle emitter has function to add a particle to the emitter and the emitter will animate it with the update and draw functinos
-    // particle emitter has a list or something of all the particles to loop through to draw and update
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (leftCircle.contains(event.getX(), event.getY())) {
-                    spaceship.rotateLeft();
-                    leftCircle.active();
-                }
-                if (rightCircle.contains(event.getX(), event.getY())) {
-                    spaceship.rotateRight();
-                    rightCircle.active();
-                }
-                if (fireButton.contains(event.getX(), event.getY())) {
-                    fireButton.active();
-                    spaceship.fire(emitter);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if (leftCircle.contains(event.getX(), event.getY())) {
-                    spaceship.rotateStop();
-                    leftCircle.inactive();
-                }
-                if (rightCircle.contains(event.getX(), event.getY())) {
-                    spaceship.rotateStop();
-                    rightCircle.inactive();
-                }
-                if (fireButton.contains(event.getX(), event.getY())) {
-                    fireButton.inactive();
-                }
-                break;
-        }
+
+        gameHolder.handleTouchEvent(event);
         return true;
-        //return super.onTouchEvent(event);
+
     }
 
     public void update() {
 
-        spaceship.update();
-        leftCircle.update();
-        rightCircle.update();
-        fireButton.update();
-        emitter.update();
-        meteorContainer.update();
+        gameHolder.updateGameObjects();
 
     }
 
@@ -128,11 +83,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         super.draw(canvas);
 
-        spaceship.draw(canvas);
-        leftCircle.draw(canvas);
-        rightCircle.draw(canvas);
-        fireButton.draw(canvas);
-        emitter.draw(canvas);
+        gameHolder.drawGameObjects(canvas);
 
     }
 

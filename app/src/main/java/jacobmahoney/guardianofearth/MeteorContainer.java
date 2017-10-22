@@ -19,13 +19,10 @@ public class MeteorContainer implements GameObject {
 
     }
 
+    @Override
     public void update() {
 
-        // RUNS 56 TIMES A SECOND
-
         if (System.currentTimeMillis() > time) {
-
-            //Log.d("MeteorContainer", "here");
 
             double x = Math.random() * screenWidth;
             double y = -50;

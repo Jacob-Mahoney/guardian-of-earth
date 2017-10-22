@@ -2,10 +2,12 @@ package jacobmahoney.guardianofearth;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class MainMenuActivity extends Activity {
 
@@ -16,6 +18,14 @@ public class MainMenuActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main_menu_layout);
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
+        TextView txt = findViewById(R.id.title);
+        txt.setTypeface(font);
+        txt = findViewById(R.id.play_game);
+        txt.setTypeface(font);
+        txt = findViewById(R.id.settings);
+        txt.setTypeface(font);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 

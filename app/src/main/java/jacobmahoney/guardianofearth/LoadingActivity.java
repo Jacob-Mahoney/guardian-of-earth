@@ -2,13 +2,15 @@ package jacobmahoney.guardianofearth;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
-// instead of fragments, make an activity for loading screen, main menu, game, settings, etc. because these are fullscreen views
-// but since we have gamepanel class that is a surfaceholder, just make another gameactivity or something the sets content view to a new gamepanel
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoadingActivity extends Activity {
 
@@ -22,9 +24,21 @@ public class LoadingActivity extends Activity {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
+        TextView txt = findViewById(R.id.loading_text);
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
+        txt.setTypeface(font);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                switchToMainMenuActivity();
+            }
+        }, 3000);
+
     }
 
-    public void switchToMainMenuActivity(View view) {
+    public void switchToMainMenuActivity() {
 
         Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);

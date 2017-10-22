@@ -43,6 +43,7 @@ public class MainThread extends Thread {
 
             if (surfaceHolder.getSurface().isValid()) {
                 canvas = this.surfaceHolder.lockCanvas();
+                if (canvas == null) continue; // needed to check the while condition again to prevent a null pointer exception in gamepanel
                 this.gamePanel.draw(canvas);
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }

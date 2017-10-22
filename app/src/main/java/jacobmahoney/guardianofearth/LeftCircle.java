@@ -51,6 +51,7 @@ public class LeftCircle implements GameObject {
 
     }
 
+    @Override
     public void update() {
 
         RectF oval = new RectF(left, top, right, bottom);
