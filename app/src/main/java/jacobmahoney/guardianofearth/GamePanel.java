@@ -19,6 +19,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private RightCircle rightCircle;
     private FireButton fireButton;
     private ParticleEmitter emitter;
+    private MeteorContainer meteorContainer;
 
     public GamePanel(Context context) {
 
@@ -31,6 +32,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         rightCircle = new RightCircle(screenWidth, screenHeight);
         fireButton = new FireButton(screenWidth, screenHeight);
         emitter = new ParticleEmitter(screenWidth, screenHeight);
+        meteorContainer = new MeteorContainer(screenWidth, screenHeight, emitter);
 
     }
 
@@ -117,6 +119,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         rightCircle.update();
         fireButton.update();
         emitter.update();
+        meteorContainer.update();
 
     }
 
