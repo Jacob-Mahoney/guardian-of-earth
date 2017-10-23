@@ -25,7 +25,7 @@ public class GameHolder {
     public void spaceshipFire() {
 
         double rot = 90 - spaceship.getRotation();
-        Point p = rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
+        Point p = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
 
         emitter.addParticle(new Particle(p.x, p.y, (int)(15*Math.cos(Math.toRadians(rot))), -(int)(15*Math.sin(Math.toRadians(rot)))));
 
@@ -57,20 +57,6 @@ public class GameHolder {
                 }
                 break;
         }
-    }
-
-    private Point rotateAboutPoint(Point point, Point pivot, double angle) {
-
-        Point p = new Point();
-
-        double x = Math.cos(angle) * (point.x - pivot.x) - Math.sin(angle) * (point.y - pivot.y) + pivot.x;
-        double y = Math.sin(angle) * (point.x - pivot.x) + Math.cos(angle) * (point.y - pivot.y) + pivot.y;
-
-        p.x = (int)x;
-        p.y = (int)y;
-
-        return p;
-
     }
 
     public void updateGameObjects() {

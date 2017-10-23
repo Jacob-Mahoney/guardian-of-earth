@@ -15,7 +15,7 @@ public class SpaceshipObject implements GameObject {
     private enum Status { ROTATING_LEFT, NOT_ROTATING, ROTATING_RIGHT }
     private Status status;
 
-    public SpaceshipObject(int screenWidth, int screenHeight) {
+    SpaceshipObject(int screenWidth, int screenHeight) {
 
         triangle = new Path();
         paint = new Paint();
@@ -67,11 +67,16 @@ public class SpaceshipObject implements GameObject {
             }
         }
 
+        // finding out the spaceship's equivalent rotated points
+        Point noseR = Utility.rotateAboutPoint(nose, pivot, Math.toRadians(rotation));
+        Point bottomLeftR = Utility.rotateAboutPoint(bottomLeft, pivot, Math.toRadians(rotation));
+        Point bottomRightR = Utility.rotateAboutPoint(bottomRight, pivot, Math.toRadians(rotation));
+
         triangle.reset();
-        triangle.moveTo(bottomLeft.x, bottomLeft.y);
-        triangle.lineTo(nose.x, nose.y);
-        triangle.lineTo(bottomRight.x, bottomRight.y);
-        triangle.lineTo(bottomLeft.x, bottomLeft.y);
+        triangle.moveTo(bottomLeftR.x, bottomLeftR.y);
+        triangle.lineTo(noseR.x, noseR.y);
+        triangle.lineTo(bottomLeftR.x, bottomLeftR.y);
+        triangle.lineTo(bottomLeftR.x, bottomLeftR.y);
         triangle.close();
 
         paint.setColor(Color.WHITE);
@@ -82,10 +87,7 @@ public class SpaceshipObject implements GameObject {
     @Override
     public void draw(Canvas canvas) {
 
-        canvas.save();
-        canvas.rotate(rotation, pivot.x, pivot.y);
         canvas.drawPath(triangle, paint);
-        canvas.restore();
 
     }
 
