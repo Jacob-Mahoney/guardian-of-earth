@@ -3,14 +3,14 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import java.util.Random;
 
-public class MeteorContainer implements GameObject {
+public class MeteorShower implements GameObject {
 
     ParticleEmitter emitter;
     int screenWidth;
     int screenHeight;
     long time;
 
-    MeteorContainer(int screenWidth, int screenHeight, ParticleEmitter emitter) {
+    MeteorShower(int screenWidth, int screenHeight, ParticleEmitter emitter) {
 
         this.emitter = emitter;
         this.screenWidth = screenWidth;

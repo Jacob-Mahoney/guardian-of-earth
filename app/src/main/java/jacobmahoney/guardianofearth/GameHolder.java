@@ -10,7 +10,7 @@ public class GameHolder {
     private LeftCircle leftCircle;
     private RightCircle rightCircle;
     private ParticleEmitter emitter;
-    private MeteorContainer meteorContainer;
+    private Wave wave;
 
     GameHolder(int screenWidth, int screenHeight) {
 
@@ -18,7 +18,7 @@ public class GameHolder {
         leftCircle = new LeftCircle(screenWidth, screenHeight);
         rightCircle = new RightCircle(screenWidth, screenHeight);
         emitter = new ParticleEmitter(screenWidth, screenHeight);
-        meteorContainer = new MeteorContainer(screenWidth, screenHeight, emitter);
+        wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6, emitter);
 
     }
 
@@ -65,7 +65,6 @@ public class GameHolder {
         leftCircle.update();
         rightCircle.update();
         emitter.update();
-        meteorContainer.update();
 
     }
 
