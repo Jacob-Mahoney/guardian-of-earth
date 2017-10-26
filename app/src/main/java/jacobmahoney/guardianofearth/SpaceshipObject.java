@@ -15,18 +15,19 @@ public class SpaceshipObject implements GameObject {
     private enum Status { ROTATING_LEFT, NOT_ROTATING, ROTATING_RIGHT }
     private Status status;
 
-    SpaceshipObject(int screenWidth, int screenHeight) {
+    SpaceshipObject() {
 
         triangle = new Path();
         paint = new Paint();
-
         rotation = 0;
-        int middleX = screenWidth / 2;
-        bottomLeft = new Point(middleX-30, screenHeight-20);
-        nose = new Point(middleX, screenHeight-100);
-        bottomRight = new Point(middleX+30, screenHeight-20);
-        pivot = new Point(middleX, screenHeight-20);
         status = Status.NOT_ROTATING;
+
+        bottomLeft = new Point();
+        nose = new Point();
+        bottomRight = new Point();
+        pivot = new Point();
+
+        ScreenDrawer.getInstance().registerGameObject(this);
 
     }
 
@@ -55,7 +56,14 @@ public class SpaceshipObject implements GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(int screenWidth, int screenHeight) {
+
+        int middleX = screenWidth / 2;
+
+        bottomLeft.set(middleX-30, screenHeight-20);
+        nose.set(middleX, screenHeight-100);
+        bottomRight.set(middleX+30, screenHeight-20);
+        pivot.set(middleX, screenHeight-20);
 
         if (status == Status.ROTATING_LEFT) {
             if ((rotation-2.5) > -45) {
@@ -75,7 +83,7 @@ public class SpaceshipObject implements GameObject {
         triangle.reset();
         triangle.moveTo(bottomLeftR.x, bottomLeftR.y);
         triangle.lineTo(noseR.x, noseR.y);
-        triangle.lineTo(bottomLeftR.x, bottomLeftR.y);
+        triangle.lineTo(bottomRightR.x, bottomRightR.y);
         triangle.lineTo(bottomLeftR.x, bottomLeftR.y);
         triangle.close();
 

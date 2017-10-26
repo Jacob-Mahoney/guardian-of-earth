@@ -8,41 +8,46 @@ import java.util.List;
 
 public class ParticleEmitter implements GameObject {
 
-    List<Particle> list = new LinkedList<>();
+    private List<Particle> particles = new LinkedList<>();
     private Paint paint;
-    private int screenWidth, screenHeight;
+    private static ParticleEmitter instance = null;
 
-    public ParticleEmitter(int screenWidth, int screenHeight) {
+    protected ParticleEmitter() {
 
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
 
+        ScreenDrawer.getInstance().registerGameObject(this);
+
+    }
+
+    public static ParticleEmitter getInstance() {
+        if (instance == null) {
+            instance = new ParticleEmitter();
+        }
+        return instance;
     }
 
     public void addParticle(Particle p) {
-        list.add(p);
+        particles.add(p);
     }
 
-    @Override
-    public void update() {
+    public void update(int screenWidth, int screenHeight) {
 
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).update();
-            if (list.get(i).offscreen(screenWidth, screenHeight)) {
-                list.remove(list.get(i));
+        for (int i = 0; i < particles.size(); i++) {
+            particles.get(i).update();
+            if (particles.get(i).offscreen(screenWidth, screenHeight)) {
+                particles.remove(particles.get(i));
             }
         }
 
     }
 
-    @Override
     public void draw(Canvas canvas) {
 
-        for (int i = 0; i < list.size(); i++) {
-            canvas.drawRect(list.get(i), paint);
+        for (int i = 0; i < particles.size(); i++) {
+            canvas.drawRect(particles.get(i), paint);
         }
 
     }

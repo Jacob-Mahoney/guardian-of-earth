@@ -22,7 +22,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         setFocusable(true);
         getScreenSize(context);
-        gameHolder = new GameHolder(screenWidth, screenHeight);
+        gameHolder = new GameHolder();
+        ScreenDrawer.getInstance().setScreenWidth(screenWidth);
+        ScreenDrawer.getInstance().setScreenHeight(screenHeight);
 
     }
 
@@ -73,7 +75,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
 
-        gameHolder.updateGameObjects();
+        ScreenDrawer.getInstance().updateGameObjects();
 
     }
 
@@ -82,7 +84,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         super.draw(canvas);
 
-        gameHolder.drawGameObjects(canvas);
+        ScreenDrawer.getInstance().drawGameObjects(canvas);
 
     }
 

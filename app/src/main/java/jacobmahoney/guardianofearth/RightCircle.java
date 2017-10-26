@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Region;
 
 public class RightCircle implements GameObject {
 
@@ -15,22 +16,15 @@ public class RightCircle implements GameObject {
     private float right;
     private float bottom;
 
-    private int screenWidth;
-    private int screenHeight;
-
     private boolean active;
 
-    public RightCircle(int screenWidth, int screenHeight) {
+    public RightCircle() {
 
         active = false;
         path = new Path();
         paint = new Paint();
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-        left = (float)0.75*screenWidth;
-        top = 0;
-        right = (float)(screenWidth + (0.25*screenWidth));
-        bottom = screenHeight;
+
+        ScreenDrawer.getInstance().registerGameObject(this);
 
     }
 
@@ -42,17 +36,19 @@ public class RightCircle implements GameObject {
         active = false;
     }
 
-    public boolean contains(float x, float y) {
+    public boolean contains(int x, int y) {
 
-        double left = Math.pow(x - screenWidth, 2) + Math.pow(y - 0.5*screenHeight, 2);
-        double right = Math.pow(0.25*screenWidth, 2);
-
-        return (left < right);
+        return Utility.getRegionFromPath(path).contains(x, y);
 
     }
 
     @Override
-    public void update() {
+    public void update(int screenWidth, int screenHeight) {
+
+        left = (float)0.75*screenWidth;
+        top = 0;
+        right = (float)(screenWidth + (0.25*screenWidth));
+        bottom = screenHeight;
 
         RectF oval = new RectF(left, top, right, bottom);
         path.reset();
@@ -62,7 +58,7 @@ public class RightCircle implements GameObject {
         paint.setColor(Color.WHITE);
 
         if (active) {
-            paint.setAlpha(50);
+            paint.setAlpha(30);
         } else {
             paint.setAlpha(0);
         }

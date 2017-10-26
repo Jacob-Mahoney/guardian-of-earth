@@ -1,6 +1,9 @@
 package jacobmahoney.guardianofearth;
 
+import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.RectF;
+import android.graphics.Region;
 
 public class Utility {
 
@@ -15,6 +18,17 @@ public class Utility {
         p.y = (int)y;
 
         return p;
+
+    }
+
+    public static Region getRegionFromPath(Path path) {
+
+        RectF rectF = new RectF();
+        path.computeBounds(rectF, true);
+        Region region = new Region();
+        region.setPath(path, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+
+        return region;
 
     }
 

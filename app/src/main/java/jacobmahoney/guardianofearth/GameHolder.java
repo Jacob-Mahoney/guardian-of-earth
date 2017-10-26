@@ -1,6 +1,5 @@
 package jacobmahoney.guardianofearth;
 
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.view.MotionEvent;
 
@@ -10,15 +9,16 @@ public class GameHolder {
     private LeftCircle leftCircle;
     private RightCircle rightCircle;
     private ParticleEmitter emitter;
-    private Wave wave;
+    //private Wave wave;
 
-    GameHolder(int screenWidth, int screenHeight) {
+    GameHolder() {
 
-        spaceship = new SpaceshipObject(screenWidth, screenHeight);
-        leftCircle = new LeftCircle(screenWidth, screenHeight);
-        rightCircle = new RightCircle(screenWidth, screenHeight);
-        emitter = new ParticleEmitter(screenWidth, screenHeight);
-        wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6, emitter);
+        spaceship = new SpaceshipObject();
+        leftCircle = new LeftCircle();
+        rightCircle = new RightCircle();
+        emitter = ParticleEmitter.getInstance();
+        //wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6);
+        //wave.start();
 
     }
 
@@ -34,11 +34,11 @@ public class GameHolder {
     public void handleTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (leftCircle.contains(event.getX(), event.getY())) {
+                if (leftCircle.contains((int)event.getX(), (int)event.getY())) {
                     spaceship.rotateLeft();
                     leftCircle.active();
                 }
-                else if (rightCircle.contains(event.getX(), event.getY())) {
+                else if (rightCircle.contains((int)event.getX(), (int)event.getY())) {
                     spaceship.rotateRight();
                     rightCircle.active();
                 }
@@ -47,34 +47,16 @@ public class GameHolder {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (leftCircle.contains(event.getX(), event.getY())) {
+                if (leftCircle.contains((int)event.getX(), (int)event.getY())) {
                     spaceship.rotateStop();
                     leftCircle.inactive();
                 }
-                else if (rightCircle.contains(event.getX(), event.getY())) {
+                else if (rightCircle.contains((int)event.getX(), (int)event.getY())) {
                     spaceship.rotateStop();
                     rightCircle.inactive();
                 }
                 break;
         }
-    }
-
-    public void updateGameObjects() {
-
-        spaceship.update();
-        leftCircle.update();
-        rightCircle.update();
-        emitter.update();
-
-    }
-
-    public void drawGameObjects(Canvas canvas) {
-
-        spaceship.draw(canvas);
-        leftCircle.draw(canvas);
-        rightCircle.draw(canvas);
-        emitter.draw(canvas);
-
     }
 
 }
