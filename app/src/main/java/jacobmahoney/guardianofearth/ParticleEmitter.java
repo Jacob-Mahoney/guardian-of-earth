@@ -18,8 +18,6 @@ public class ParticleEmitter implements GameObject {
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
 
-        ScreenDrawer.getInstance().registerGameObject(this);
-
     }
 
     public static ParticleEmitter getInstance() {

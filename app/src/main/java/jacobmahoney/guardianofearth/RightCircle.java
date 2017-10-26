@@ -20,8 +20,6 @@ public class RightCircle implements GameObject {
         path = new Path();
         paint = new Paint();
 
-        ScreenDrawer.getInstance().registerGameObject(this);
-
     }
 
     public void active() {

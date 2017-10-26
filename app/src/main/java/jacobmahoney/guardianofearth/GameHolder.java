@@ -11,14 +11,28 @@ public class GameHolder {
     private ParticleEmitter emitter;
     //private Wave wave;
 
+    // combine leftcircle and rightcircle into one class and pass in either string "left" or "right" into it to clarify or something else
+
     GameHolder() {
 
         spaceship = new SpaceshipObject();
         leftCircle = new LeftCircle();
         rightCircle = new RightCircle();
         emitter = ParticleEmitter.getInstance();
+
+        registerGameObjects();
+
         //wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6);
         //wave.start();
+
+    }
+
+    public void registerGameObjects() {
+
+        ScreenDrawer.getInstance().registerGameObject(spaceship);
+        ScreenDrawer.getInstance().registerGameObject(leftCircle);
+        ScreenDrawer.getInstance().registerGameObject(rightCircle);
+        ScreenDrawer.getInstance().registerGameObject(emitter);
 
     }
 

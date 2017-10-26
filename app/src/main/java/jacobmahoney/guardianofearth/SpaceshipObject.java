@@ -27,8 +27,6 @@ public class SpaceshipObject implements GameObject {
         bottomRight = new Point();
         pivot = new Point();
 
-        ScreenDrawer.getInstance().registerGameObject(this);
-
     }
 
     public void rotateLeft() {
