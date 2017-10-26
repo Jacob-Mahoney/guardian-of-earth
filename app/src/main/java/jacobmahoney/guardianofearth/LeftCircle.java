@@ -11,10 +11,6 @@ public class LeftCircle implements GameObject {
 
     private Path path;
     private Paint paint;
-    private float left;
-    private float top;
-    private float right;
-    private float bottom;
 
     private boolean active;
 
@@ -45,10 +41,10 @@ public class LeftCircle implements GameObject {
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        left = -(float)(0.25*screenWidth);
-        top = 0;
-        right = (float)0.25*screenWidth;
-        bottom = screenHeight;
+        float left = -(float)(0.25*screenWidth);
+        float top = 0;
+        float right = (float)0.25*screenWidth;
+        float bottom = screenHeight;
 
         RectF oval = new RectF(left, top, right, bottom);
         path.reset();
