@@ -1,6 +1,7 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,10 @@ public class ScreenDrawer {
 
     public void registerGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
+    }
+
+    public void unRegisterGameObject(GameObject gameObject) {
+        gameObjects.remove(gameObject);
     }
 
     public static ScreenDrawer getInstance() {
