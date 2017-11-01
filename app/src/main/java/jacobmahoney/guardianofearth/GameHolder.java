@@ -3,6 +3,9 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Point;
 import android.view.MotionEvent;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameHolder {
 
     private SpaceshipObject spaceship;
@@ -10,10 +13,11 @@ public class GameHolder {
     private RightCircle rightCircle;
     private ParticleEmitter emitter;
     private Wave wave;
+    private List<Wave> waves = new LinkedList<>();
 
     // combine leftcircle and rightcircle into one class and pass in either string "left" or "right" into it to clarify or something else
 
-    GameHolder() {
+    public GameHolder() {
 
         spaceship = new SpaceshipObject();
         leftCircle = new LeftCircle();
@@ -22,6 +26,16 @@ public class GameHolder {
         wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6);
 
         registerGameObjects();
+
+        wave.start();
+
+    }
+
+    public void initializeWaves() {
+
+        for (int i = 0; i < 10; i++) {
+
+        }
 
     }
 

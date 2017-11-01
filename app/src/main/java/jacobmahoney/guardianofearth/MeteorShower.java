@@ -8,8 +8,10 @@ import java.util.Random;
 
 public class MeteorShower extends Observable implements GameObject {
 
-    long time;
+    private long time;
     private int minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors, counter;
+    private enum MeteorShowerStatus {NOT_STARTED, IN_PROGRESS, DONE}
+    private MeteorShowerStatus status;
 
     public MeteorShower(int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
 
@@ -18,50 +20,60 @@ public class MeteorShower extends Observable implements GameObject {
         this.minSpeed = minSpeed;
         this.maxSpeed = maxSpeed;
         this.numberOfMeteors = numberOfMeteors;
+        status = MeteorShowerStatus.NOT_STARTED;
         counter = 0;
         time = -1;
 
     }
 
+    public void start() {
+        status = MeteorShowerStatus.IN_PROGRESS;
+    }
+
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        if (time == -1) {
-            time = System.currentTimeMillis();
-        }
+        if (status == MeteorShowerStatus.IN_PROGRESS) {
 
-        if (counter < numberOfMeteors) {
-
-            if (System.currentTimeMillis() > time) {
-
-                Log.d("MeteorShower", String.valueOf(System.currentTimeMillis()));
-
-                counter++;
-
-                Random r;
-                int min, max, rand;
-
-                double x = Math.random() * screenWidth;
-                double y = -50;
-
-                r = new Random();
-                min = minRate;
-                max = maxRate;
-                rand = r.nextInt(max-min) + min;
-                time += rand;
-
-                r = new Random();
-                min = minSpeed;
-                max = maxSpeed;
-                rand = r.nextInt(max-min) + min;
-
-                ParticleEmitter.getInstance().addParticle(new Particle((int)x, (int)y, 0, rand));
-
+            if (time == -1) {
+                time = System.currentTimeMillis();
             }
 
-        } else {
-            setChanged();
-            notifyObservers();
+            if (counter < numberOfMeteors) {
+
+                if (System.currentTimeMillis() > time) {
+
+                    Log.d("MeteorShower", String.valueOf(System.currentTimeMillis()));
+
+                    counter++;
+
+                    Random r;
+                    int min, max, rand;
+
+                    double x = Math.random() * screenWidth;
+                    double y = -50;
+
+                    r = new Random();
+                    min = minRate;
+                    max = maxRate;
+                    rand = r.nextInt(max-min) + min;
+                    time += rand;
+
+                    r = new Random();
+                    min = minSpeed;
+                    max = maxSpeed;
+                    rand = r.nextInt(max-min) + min;
+
+                    ParticleEmitter.getInstance().addParticle(new Particle((int)x, (int)y, 0, rand));
+
+                }
+
+            } else {
+                status = MeteorShowerStatus.DONE;
+                setChanged();
+                notifyObservers(status);
+            }
+
         }
 
     }
