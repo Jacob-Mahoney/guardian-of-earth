@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Wave implements GameObject, Observer {
+public class Wave extends Observable implements GameObject, Observer {
 
     private String name;
     private MeteorShower shower;
@@ -37,8 +37,11 @@ public class Wave implements GameObject, Observer {
     @Override
     public void update(Observable observable, Object arg) {
 
-        Log.d("Wave", arg.toString());
+        //Log.d("Wave", arg.toString());
         status = WaveStatus.DONE;
+
+        setChanged();
+        notifyObservers("all the meteors have been emitted");
 
     }
 

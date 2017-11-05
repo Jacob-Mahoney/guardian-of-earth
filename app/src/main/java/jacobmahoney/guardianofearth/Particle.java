@@ -2,22 +2,20 @@ package jacobmahoney.guardianofearth;
 
 import android.graphics.RectF;
 
-public class Particle extends RectF {
+public abstract class Particle extends RectF {
 
     private int dx, dy;
-    private final int WIDTH = 12;
-    private final int HEIGHT = 12;
 
-    public Particle(int x, int y, int dx, int dy) {
+    public Particle(int x, int y, int dx, int dy, int width, int height) {
 
         this.dx = dx;
         this.dy = dy;
 
         // centering particle around point
-        this.left = x - WIDTH/2;
-        this.top = y - HEIGHT/2;
-        this.right = x + WIDTH/2;
-        this.bottom = y + HEIGHT/2;
+        this.left = x - width/2;
+        this.top = y - height/2;
+        this.right = x + width/2;
+        this.bottom = y + height/2;
 
     }
 
@@ -28,14 +26,6 @@ public class Particle extends RectF {
         this.bottom += dy;
     }
 
-    public boolean offscreen(int screenWidth, int screenHeight) {
-
-        /*if (right < 0 || left > screenWidth || bottom < 0 || top > screenHeight) {
-            return true;
-        }*/
-
-        return false;
-
-    }
+    public abstract boolean offscreen(int screenWidth, int screenHeight);
 
 }

@@ -1,12 +1,15 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class GameHolder {
+public class GameHolder implements Observer {
 
     private SpaceshipObject spaceship;
     private LeftCircle leftCircle;
@@ -15,21 +18,25 @@ public class GameHolder {
     private Wave wave;
     private List<Wave> waves = new LinkedList<>();
 
-    // combine leftcircle and rightcircle into one class and pass in either string "left" or "right" into it to clarify or something else
-
     public GameHolder() {
 
         spaceship = new SpaceshipObject();
         leftCircle = new LeftCircle();
         rightCircle = new RightCircle();
         emitter = ParticleEmitter.getInstance();
+        emitter.addObserver(this);
         wave = new Wave("Wave 1", 1000, 3000, 2, 4, 6);
+        wave.addObserver(this);
 
         registerGameObjects();
 
         wave.start();
 
     }
+
+    // need to make unified enum in here maybe to handle the game status at all times to handle properly observer updates
+    // also need to try "deleting" a laser and meteor if collided in checkCollisions method and see if that messes up the update() function
+    // vv need to do this function right on down here brother vv
 
     public void initializeWaves() {
 
@@ -54,7 +61,7 @@ public class GameHolder {
         double rot = 90 - spaceship.getRotation();
         Point p = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
 
-        emitter.addParticle(new Particle(p.x, p.y, (int)(15*Math.cos(Math.toRadians(rot))), -(int)(15*Math.sin(Math.toRadians(rot)))));
+        emitter.addParticle(new Laser(p.x, p.y, (int)(15*Math.cos(Math.toRadians(rot))), -(int)(15*Math.sin(Math.toRadians(rot)))));
 
     }
 
@@ -84,6 +91,13 @@ public class GameHolder {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object arg) {
+
+        Log.d("GameHolder", observable.getClass().toString() + ": " + arg.toString());
+
     }
 
 }
