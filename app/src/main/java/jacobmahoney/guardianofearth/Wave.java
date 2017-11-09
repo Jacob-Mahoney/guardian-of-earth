@@ -3,12 +3,13 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
+import android.graphics.Typeface;
+import android.widget.TextView;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class Wave extends Observable implements GameObject, Observer {
+public class Wave extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
 
     private String name;
     private MeteorShower shower;
@@ -22,7 +23,7 @@ public class Wave extends Observable implements GameObject, Observer {
 
         this.name = name;
         shower = new MeteorShower(minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors);
-        ScreenDrawer.getInstance().registerGameObject(shower);
+        ScreenDrawer.getInstance().registerUpdateableGameObject(shower);
         shower.addObserver(this);
         paint = new Paint();
         status = WaveStatus.NOT_STARTED;
@@ -58,6 +59,7 @@ public class Wave extends Observable implements GameObject, Observer {
                 paint.setColor(Color.WHITE);
                 paint.setTextSize(0.04f * screenWidth);
                 paint.setTextAlign(Paint.Align.CENTER);
+                paint.setTypeface(ScreenDrawer.getInstance().getFont());
             }
         }
 

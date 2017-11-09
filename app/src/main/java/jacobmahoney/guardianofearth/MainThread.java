@@ -28,6 +28,11 @@ public class MainThread extends Thread {
         int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
         int MAX_FRAMESKIP = 10;
 
+        double num = 0;
+        long startTime = System.currentTimeMillis();
+        double avg;
+        long time = System.currentTimeMillis();
+
         long next_game_tick = System.currentTimeMillis();
         int loops;
 
@@ -46,6 +51,18 @@ public class MainThread extends Thread {
                 if (canvas == null) continue; // needed to check the while condition again to prevent a null pointer exception in gamepanel
                 this.gamePanel.draw(canvas);
                 surfaceHolder.unlockCanvasAndPost(canvas);
+            }
+
+            num++;
+
+            if (System.currentTimeMillis() >= time) {
+                if (System.currentTimeMillis() != startTime) {
+                    avg = (num) / ( (System.currentTimeMillis() - startTime) / 1000);
+                    Log.d("MainThread", Math.round(avg) + " FPS");
+                } else {
+                    Log.d("MainThread", "0 FPS");
+                }
+                time += 1000;
             }
 
         }

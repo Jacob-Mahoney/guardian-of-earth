@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 
-public class SpaceshipObject implements GameObject {
+public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject {
 
     private Path triangle;
     private Point nose, bottomLeft, bottomRight, pivot;

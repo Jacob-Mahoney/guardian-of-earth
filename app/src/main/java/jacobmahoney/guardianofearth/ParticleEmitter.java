@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
-public class ParticleEmitter extends Observable implements GameObject {
+public class ParticleEmitter extends Observable implements UpdateableGameObject, DrawableGameObject {
 
     private List<Particle> particles;
     private List<Particle> meteors;

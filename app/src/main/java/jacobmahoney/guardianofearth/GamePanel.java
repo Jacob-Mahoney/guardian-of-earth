@@ -1,8 +1,10 @@
 package jacobmahoney.guardianofearth;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,17 +16,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private int screenWidth;
     private int screenHeight;
-    private GameHolder gameHolder;
+    private GameController gameController;
 
-    public GamePanel(Context context) {
+    public GamePanel(Context context, Typeface font) {
 
         super(context);
         getHolder().addCallback(this);
         setFocusable(true);
         getScreenSize(context);
-        gameHolder = new GameHolder();
+        gameController = new GameController();
         ScreenDrawer.getInstance().setScreenWidth(screenWidth);
         ScreenDrawer.getInstance().setScreenHeight(screenHeight);
+        ScreenDrawer.getInstance().setFont(font);
 
     }
 
@@ -68,7 +71,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        gameHolder.handleTouchEvent(event);
+        gameController.handleTouchEvent(event);
         return true;
 
     }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameHolder implements Observer {
+public class GameController implements Observer {
 
     private SpaceshipObject spaceship;
     private LeftCircle leftCircle;
@@ -17,8 +17,9 @@ public class GameHolder implements Observer {
     private ParticleEmitter emitter;
     private Wave wave;
     private List<Wave> waves = new LinkedList<>();
+    private final int LASER_SPEED = 15;
 
-    public GameHolder() {
+    public GameController() {
 
         spaceship = new SpaceshipObject();
         leftCircle = new LeftCircle();
@@ -48,11 +49,20 @@ public class GameHolder implements Observer {
 
     public void registerGameObjects() {
 
-        ScreenDrawer.getInstance().registerGameObject(spaceship);
-        ScreenDrawer.getInstance().registerGameObject(leftCircle);
-        ScreenDrawer.getInstance().registerGameObject(rightCircle);
-        ScreenDrawer.getInstance().registerGameObject(emitter);
-        ScreenDrawer.getInstance().registerGameObject(wave);
+        ScreenDrawer.getInstance().registerUpdateableGameObject(spaceship);
+        ScreenDrawer.getInstance().registerDrawableGameObject(spaceship);
+
+        ScreenDrawer.getInstance().registerUpdateableGameObject(leftCircle);
+        ScreenDrawer.getInstance().registerDrawableGameObject(leftCircle);
+
+        ScreenDrawer.getInstance().registerUpdateableGameObject(rightCircle);
+        ScreenDrawer.getInstance().registerDrawableGameObject(rightCircle);
+
+        ScreenDrawer.getInstance().registerUpdateableGameObject(emitter);
+        ScreenDrawer.getInstance().registerDrawableGameObject(emitter);
+
+        ScreenDrawer.getInstance().registerUpdateableGameObject(wave);
+        ScreenDrawer.getInstance().registerDrawableGameObject(wave);
 
     }
 
@@ -61,7 +71,7 @@ public class GameHolder implements Observer {
         double rot = 90 - spaceship.getRotation();
         Point p = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
 
-        emitter.addParticle(new Laser(p.x, p.y, (int)(15*Math.cos(Math.toRadians(rot))), -(int)(15*Math.sin(Math.toRadians(rot)))));
+        emitter.addParticle(new Laser(p.x, p.y, (int)(LASER_SPEED*Math.cos(Math.toRadians(rot))), -(int)(LASER_SPEED*Math.sin(Math.toRadians(rot)))));
 
     }
 
@@ -96,7 +106,7 @@ public class GameHolder implements Observer {
     @Override
     public void update(Observable observable, Object arg) {
 
-        Log.d("GameHolder", observable.getClass().toString() + ": " + arg.toString());
+        Log.d("GameController", observable.getClass().toString() + ": " + arg.toString());
 
     }
 

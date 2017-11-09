@@ -1,12 +1,11 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
-import android.util.Log;
 
 import java.util.Observable;
 import java.util.Random;
 
-public class MeteorShower extends Observable implements GameObject {
+public class MeteorShower extends Observable implements UpdateableGameObject {
 
     private long time;
     private int minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors, counter;
@@ -73,11 +72,6 @@ public class MeteorShower extends Observable implements GameObject {
             }
 
         }
-
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
 
     }
 

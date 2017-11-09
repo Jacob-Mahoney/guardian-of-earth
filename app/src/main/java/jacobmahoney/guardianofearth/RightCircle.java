@@ -5,9 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Region;
 
-public class RightCircle implements GameObject {
+public class RightCircle implements UpdateableGameObject, DrawableGameObject {
 
     private Path path;
     private Paint paint;
