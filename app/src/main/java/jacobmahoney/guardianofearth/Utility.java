@@ -7,6 +7,10 @@ import android.graphics.Region;
 
 public class Utility {
 
+    private Utility() {
+
+    }
+
     public static Point rotateAboutPoint(Point point, Point pivot, double angle) {
 
         Point p = new Point();

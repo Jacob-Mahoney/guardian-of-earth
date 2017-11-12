@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -16,7 +15,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private int screenWidth;
     private int screenHeight;
-    private GameController gameController;
 
     public GamePanel(Context context, Typeface font) {
 
@@ -24,10 +22,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         setFocusable(true);
         getScreenSize(context);
-        gameController = new GameController();
+
         ScreenDrawer.getInstance().setScreenWidth(screenWidth);
         ScreenDrawer.getInstance().setScreenHeight(screenHeight);
         ScreenDrawer.getInstance().setFont(font);
+
+        GameController.getInstance().startNewGame();
 
     }
 
@@ -71,24 +71,32 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        gameController.handleTouchEvent(event);
-        return true;
+        int action = event.getActionMasked();
+        int index = event.getActionIndex();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                GameController.getInstance().actionDownEvent((int)event.getX(index), (int)event.getY(index));
+                return true;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                GameController.getInstance().actionUpEvent((int)event.getX(index), (int)event.getY(index));
+                return true;
+        }
+
+        return false;
 
     }
 
     public void update() {
-
         ScreenDrawer.getInstance().updateGameObjects();
-
     }
 
     @Override
     public void draw(Canvas canvas) {
-
         super.draw(canvas);
-
         ScreenDrawer.getInstance().drawGameObjects(canvas);
-
     }
 
 }

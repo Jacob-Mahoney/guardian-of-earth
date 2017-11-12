@@ -3,8 +3,6 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.widget.TextView;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -13,7 +11,7 @@ public class Wave extends Observable implements UpdateableGameObject, DrawableGa
 
     private String name;
     private MeteorShower shower;
-    private enum WaveStatus {NOT_STARTED, STARTING, IN_PROGRESS, DONE}
+    private enum WaveStatus {NOT_STARTED, STARTING, IN_PROGRESS}
     private WaveStatus status;
     private float textX, textY;
     private Paint paint;
@@ -27,23 +25,18 @@ public class Wave extends Observable implements UpdateableGameObject, DrawableGa
         shower.addObserver(this);
         paint = new Paint();
         status = WaveStatus.NOT_STARTED;
-        timeUntilStart = System.currentTimeMillis() + 3000;
 
     }
 
     public void start() {
+        timeUntilStart = System.currentTimeMillis() + 3000;
         status = WaveStatus.STARTING;
     }
 
     @Override
     public void update(Observable observable, Object arg) {
-
-        //Log.d("Wave", arg.toString());
-        status = WaveStatus.DONE;
-
         setChanged();
-        notifyObservers("all the meteors have been emitted");
-
+        notifyObservers(GameController.Event.METEORS_DONE_EMITTING);
     }
 
     @Override

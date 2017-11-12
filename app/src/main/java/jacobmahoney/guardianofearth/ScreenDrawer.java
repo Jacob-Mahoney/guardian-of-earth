@@ -1,9 +1,7 @@
 package jacobmahoney.guardianofearth;
 
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class ScreenDrawer {
     private int screenWidth, screenHeight;
     private Typeface font;
 
-    protected ScreenDrawer() {
+    private ScreenDrawer() {
 
     }
 
@@ -41,6 +39,11 @@ public class ScreenDrawer {
 
     public void setScreenHeight(int screenHeight) {
         this.screenHeight = screenHeight;
+    }
+
+    public void unRegisterAll() {
+        updateableGameObjects.clear();
+        drawableGameObjects.clear();
     }
 
     public void registerUpdateableGameObject(UpdateableGameObject updateableGameObject) {

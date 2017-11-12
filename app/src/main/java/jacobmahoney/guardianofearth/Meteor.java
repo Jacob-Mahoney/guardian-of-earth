@@ -4,7 +4,7 @@ public class Meteor extends Particle {
 
     Meteor(int x, int y, int dx, int dy) {
 
-        super(x, y, dx, dy, 30, 30);
+        super(x, y, dx, dy, 50, 50);
 
     }
 

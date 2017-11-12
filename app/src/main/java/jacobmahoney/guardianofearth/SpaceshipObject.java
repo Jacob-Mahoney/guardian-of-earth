@@ -64,12 +64,12 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
         pivot.set(middleX, screenHeight-20);
 
         if (status == Status.ROTATING_LEFT) {
-            if ((rotation-2.5) > -45) {
-                rotation -= 2.5;
+            if ((rotation-3) > -60) {
+                rotation -= 3;
             }
         } else if (status == Status.ROTATING_RIGHT) {
-            if ((rotation+2.5) < 45) {
-                rotation += 2.5;
+            if ((rotation+3) < 60) {
+                rotation += 3;
             }
         }
 
