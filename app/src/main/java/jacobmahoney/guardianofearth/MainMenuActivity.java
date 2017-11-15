@@ -19,13 +19,12 @@ public class MainMenuActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main_menu_layout);
 
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
         TextView txt = findViewById(R.id.title);
-        txt.setTypeface(font);
+        txt.setTypeface(LoadingActivity.getFont());
         txt = findViewById(R.id.play_game);
-        txt.setTypeface(font);
+        txt.setTypeface(LoadingActivity.getFont());
         txt = findViewById(R.id.settings);
-        txt.setTypeface(font);
+        txt.setTypeface(LoadingActivity.getFont());
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 

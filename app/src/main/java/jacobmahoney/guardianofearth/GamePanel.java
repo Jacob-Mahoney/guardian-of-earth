@@ -16,7 +16,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private int screenWidth;
     private int screenHeight;
 
-    public GamePanel(Context context, Typeface font) {
+    public GamePanel(Context context) {
 
         super(context);
         getHolder().addCallback(this);
@@ -25,7 +25,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         ScreenDrawer.getInstance().setScreenWidth(screenWidth);
         ScreenDrawer.getInstance().setScreenHeight(screenHeight);
-        ScreenDrawer.getInstance().setFont(font);
 
         GameController.getInstance().startNewGame();
 

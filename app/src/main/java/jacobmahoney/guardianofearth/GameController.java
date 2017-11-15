@@ -1,17 +1,21 @@
 package jacobmahoney.guardianofearth;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
-import android.view.MotionEvent;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class GameController extends Observable implements Observer {
+public class GameController extends Observable implements Observer, UpdateableGameObject, DrawableGameObject {
 
     private final int NUMBER_OF_WAVES = 10;
+
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
     private enum Status {WAVE_EMITTING, WAVE_DONE_EMITTING, DEAD, DONE}
     private Status status;
@@ -23,10 +27,13 @@ public class GameController extends Observable implements Observer {
     private final int LASER_SPEED = 15;
     private int lives;
 
+    private float textX, textY;
+    private Paint paint;
+
     private static GameController instance = null;
 
     private GameController() {
-        Log.d("GameController", "here bruh");
+        paint = new Paint();
     }
 
     public static GameController getInstance() {
@@ -54,20 +61,31 @@ public class GameController extends Observable implements Observer {
 
     }
 
+    // to pause game
+    // place boolean "paused" in gamepanel or screendrawer
+    // and place if statement based on that boolean in update() function
+
     private void endGame() {
 
         ScreenDrawer.getInstance().unRegisterAll();
 
-        //ParticleEmitter.getInstance().removeAllParticles();
+        ScreenDrawer.getInstance().registerUpdateableGameObject(this);
+        ScreenDrawer.getInstance().registerDrawableGameObject(this);
 
-        setChanged();
-        notifyObservers();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ScreenDrawer.getInstance().unRegisterAll();
+                setChanged();
+                notifyObservers();
+            }
+        }, 3000);
 
     }
 
     private void startNextWave() {
         currentWave++;
-        Log.d("GameController", "starting wave " + currentWave + "/" + NUMBER_OF_WAVES);
         waves.get(currentWave).start();
         status = Status.WAVE_EMITTING;
     }
@@ -142,6 +160,21 @@ public class GameController extends Observable implements Observer {
             rightCircle.inactive();
         }
 
+    }
+
+    @Override
+    public void update(int screenWidth, int screenHeight) {
+        textX = screenWidth / 2;
+        textY = (int) ((screenHeight / 2) - ((paint.descent() + paint.ascent()) / 2));
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(0.04f * screenWidth);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTypeface(LoadingActivity.getFont());
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawText("Game Over", textX, textY, paint);
     }
 
     @Override

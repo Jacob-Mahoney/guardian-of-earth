@@ -11,18 +11,9 @@ public class ScreenDrawer {
     private List<DrawableGameObject> drawableGameObjects = new LinkedList<>();
     private static ScreenDrawer instance = null;
     private int screenWidth, screenHeight;
-    private Typeface font;
 
     private ScreenDrawer() {
 
-    }
-
-    public void setFont(Typeface font) {
-        this.font = font;
-    }
-
-    public Typeface getFont() {
-        return font;
     }
 
     public int getScreenWidth() {

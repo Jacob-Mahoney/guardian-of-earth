@@ -52,7 +52,7 @@ public class Wave extends Observable implements UpdateableGameObject, DrawableGa
                 paint.setColor(Color.WHITE);
                 paint.setTextSize(0.04f * screenWidth);
                 paint.setTextAlign(Paint.Align.CENTER);
-                paint.setTypeface(ScreenDrawer.getInstance().getFont());
+                paint.setTypeface(LoadingActivity.getFont());
             }
         }
 

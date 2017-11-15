@@ -14,8 +14,16 @@ import java.util.TimerTask;
 
 public class LoadingActivity extends Activity {
 
+    private static Typeface font;
+
+    public static Typeface getFont() {
+        return font;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
 
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -25,7 +33,6 @@ public class LoadingActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         TextView txt = findViewById(R.id.loading_text);
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
         txt.setTypeface(font);
 
         Timer timer = new Timer();
