@@ -2,30 +2,24 @@ package jacobmahoney.guardianofearth;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 
 public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject {
 
-    private Path triangle;
-    private Point nose, bottomLeft, bottomRight, pivot;
-    private Paint paint;
+    private Bitmap bitmap;
+    private Point position, nose, pivot;
     private int rotation;
     private enum Status { ROTATING_LEFT, NOT_ROTATING, ROTATING_RIGHT }
     private Status status;
 
     public SpaceshipObject() {
 
-        triangle = new Path();
-        paint = new Paint();
+        bitmap = GameActivity.SPACESHIP_BITMAP;
         rotation = 0;
         status = Status.NOT_ROTATING;
 
-        bottomLeft = new Point();
+        position = new Point();
         nose = new Point();
-        bottomRight = new Point();
         pivot = new Point();
 
     }
@@ -59,10 +53,12 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
 
         int middleX = screenWidth / 2;
 
-        bottomLeft.set(middleX-30, screenHeight-20);
-        nose.set(middleX, screenHeight-100);
-        bottomRight.set(middleX+30, screenHeight-20);
-        pivot.set(middleX, screenHeight-20);
+        position.set(middleX - bitmap.getWidth()/2, screenHeight - 20 - bitmap.getHeight());
+        nose.set(middleX, screenHeight - 20 - bitmap.getHeight());
+        pivot.set(middleX, screenHeight - 20);
+
+        // need to make rotation based on constant speed
+        // right now if fps is lower, then spaceship will rotate slower
 
         if (status == Status.ROTATING_LEFT) {
             if ((rotation-3) > -60) {
@@ -74,28 +70,15 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
             }
         }
 
-        // finding out the spaceship's equivalent rotated points
-        Point noseR = Utility.rotateAboutPoint(nose, pivot, Math.toRadians(rotation));
-        Point bottomLeftR = Utility.rotateAboutPoint(bottomLeft, pivot, Math.toRadians(rotation));
-        Point bottomRightR = Utility.rotateAboutPoint(bottomRight, pivot, Math.toRadians(rotation));
-
-        triangle.reset();
-        triangle.moveTo(bottomLeftR.x, bottomLeftR.y);
-        triangle.lineTo(noseR.x, noseR.y);
-        triangle.lineTo(bottomRightR.x, bottomRightR.y);
-        triangle.lineTo(bottomLeftR.x, bottomLeftR.y);
-        triangle.close();
-
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
-
     }
 
     @Override
     public void draw(Canvas canvas) {
 
-        canvas.drawBitmap(GameActivity.SPACESHIP_BITMAP, 0, 0, null);
-        //canvas.drawPath(triangle, paint);
+        canvas.save();
+        canvas.rotate(rotation, pivot.x, pivot.y);
+        canvas.drawBitmap(GameActivity.SPACESHIP_BITMAP, position.x, position.y, null);
+        canvas.restore();
 
     }
 
