@@ -20,8 +20,8 @@ public class GameController extends Observable implements Observer, UpdateableGa
     private enum Status {WAVE_EMITTING, WAVE_DONE_EMITTING, DEAD, DONE}
     private Status status;
     private SpaceshipObject spaceship;
-    private LeftCircle leftCircle;
-    private RightCircle rightCircle;
+    private SideButton leftButton;
+    private SideButton rightButton;
     private List<Wave> waves = new LinkedList<>();
     private int currentWave;
     private final int LASER_SPEED = 15;
@@ -46,8 +46,8 @@ public class GameController extends Observable implements Observer, UpdateableGa
     public void startNewGame() {
 
         spaceship = new SpaceshipObject();
-        leftCircle = new LeftCircle();
-        rightCircle = new RightCircle();
+        leftButton = new SideButton(SideButton.SIDE.LEFT_SIDE);
+        rightButton = new SideButton(SideButton.SIDE.RIGHT_SIDE);
         ParticleEmitter.getInstance().removeAllParticles();
         ParticleEmitter.getInstance().addObserver(this);
         registerGameObjects();
@@ -60,6 +60,21 @@ public class GameController extends Observable implements Observer, UpdateableGa
         startNextWave();
 
     }
+
+    // make gamecontroller, particleemitter, and screendrawer not singletons
+    // can add addparticle function and registergameobject function in gamecontroller class
+    // only problem is need to figure out how to make gamecontroller signal gamepanel
+    // and make gamepanel signal gameactivity when the game ends
+    // gamepanel already extends surfaceview so it cant extend observable to get signal from gamecontroller
+
+    // may run into problem making particleemitter and screendrawer not singletons
+    // when having to register meteorshower in each wave (consider making wave handle the shower and discard meteorshower)
+    // and also when having to add add meteor particle
+    // have to make addparticle and registergameobject functions static...
+
+    // make popuptext class
+    // which takes in parameter for its name and for the length it should be on screen
+    // can be used to display wave start messages and gamecontroller end message
 
     // to pause game
     // place boolean "paused" in gamepanel or screendrawer
@@ -113,11 +128,11 @@ public class GameController extends Observable implements Observer, UpdateableGa
         ScreenDrawer.getInstance().registerUpdateableGameObject(spaceship);
         ScreenDrawer.getInstance().registerDrawableGameObject(spaceship);
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(leftCircle);
-        ScreenDrawer.getInstance().registerDrawableGameObject(leftCircle);
+        ScreenDrawer.getInstance().registerUpdateableGameObject(leftButton);
+        ScreenDrawer.getInstance().registerDrawableGameObject(leftButton);
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(rightCircle);
-        ScreenDrawer.getInstance().registerDrawableGameObject(rightCircle);
+        ScreenDrawer.getInstance().registerUpdateableGameObject(rightButton);
+        ScreenDrawer.getInstance().registerDrawableGameObject(rightButton);
 
         ScreenDrawer.getInstance().registerUpdateableGameObject(ParticleEmitter.getInstance());
         ScreenDrawer.getInstance().registerDrawableGameObject(ParticleEmitter.getInstance());
@@ -138,13 +153,13 @@ public class GameController extends Observable implements Observer, UpdateableGa
 
     public void actionDownEvent(int x, int y) {
 
-        if (leftCircle.contains(x, y)) {
+        if (leftButton.contains(x, y)) {
             spaceship.rotateLeft();
-            leftCircle.active();
+            leftButton.active();
         }
-        else if (rightCircle.contains(x, y)) {
+        else if (rightButton.contains(x, y)) {
             spaceship.rotateRight();
-            rightCircle.active();
+            rightButton.active();
         }
         else {
             spaceshipFire();
@@ -154,13 +169,13 @@ public class GameController extends Observable implements Observer, UpdateableGa
 
     public void actionUpEvent(int x, int y) {
 
-        if (leftCircle.contains(x, y)) {
+        if (leftButton.contains(x, y)) {
             spaceship.rotateStop();
-            leftCircle.inactive();
+            leftButton.inactive();
         }
-        else if (rightCircle.contains(x, y)) {
+        else if (rightButton.contains(x, y)) {
             spaceship.rotateStop();
-            rightCircle.inactive();
+            rightButton.inactive();
         }
 
     }

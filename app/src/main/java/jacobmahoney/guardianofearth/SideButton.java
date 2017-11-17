@@ -6,18 +6,24 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-public class LeftCircle implements UpdateableGameObject, DrawableGameObject {
+public class SideButton implements UpdateableGameObject, DrawableGameObject {
 
     private Path path;
     private Paint paint;
 
     private boolean active;
 
-    public LeftCircle() {
+    public static enum SIDE {LEFT_SIDE, RIGHT_SIDE}
+    private SIDE side;
 
+    public SideButton(SIDE side) {
+
+        this.side = side;
         active = false;
         path = new Path();
         paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
 
     }
 
@@ -30,33 +36,37 @@ public class LeftCircle implements UpdateableGameObject, DrawableGameObject {
     }
 
     public boolean contains(int x, int y) {
-
         return Utility.getRegionFromPath(path).contains(x, y);
-
     }
 
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        float left = -(float)(0.25*screenWidth);
         float top = 0;
-        float right = (float)0.25*screenWidth;
         float bottom = screenHeight;
+        float left, right;
+        if (side == SIDE.LEFT_SIDE) {
+            left = -(float)(0.25*screenWidth);
+            right = (float)0.25*screenWidth;
+        } else {
+            left = (float)0.75*screenWidth;
+            right = (float)(screenWidth + (0.25*screenWidth));
+        }
 
         RectF oval = new RectF(left, top, right, bottom);
         path.reset();
-        path.arcTo(oval, -90, 180, true);
+        if (side == SIDE.LEFT_SIDE) {
+            path.arcTo(oval, -90, 180, true);
+        } else {
+            path.arcTo(oval, 90, 180, true);
+        }
         path.close();
-
-        paint.setColor(Color.WHITE);
 
         if (active) {
             paint.setAlpha(30);
         } else {
             paint.setAlpha(0);
         }
-
-        paint.setStyle(Paint.Style.FILL);
 
     }
 
