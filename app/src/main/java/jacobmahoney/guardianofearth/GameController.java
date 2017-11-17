@@ -126,10 +126,13 @@ public class GameController extends Observable implements Observer, UpdateableGa
 
     private void spaceshipFire() {
 
+        // using utility function to determine the nose of the spaceship based on current rotation of the spaceship
         double rot = 90 - spaceship.getRotation();
-        Point p = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
+        Point spaceshipNose = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
+        int dx = (int) (LASER_SPEED * Math.cos(Math.toRadians(rot)));
+        int dy = -(int) (LASER_SPEED * Math.sin(Math.toRadians(rot)));
 
-        ParticleEmitter.getInstance().addParticle(new Laser(p.x, p.y, (int)(LASER_SPEED*Math.cos(Math.toRadians(rot))), -(int)(LASER_SPEED*Math.sin(Math.toRadians(rot)))));
+        ParticleEmitter.getInstance().addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
 
     }
 
