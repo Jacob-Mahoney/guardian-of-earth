@@ -1,5 +1,6 @@
 package jacobmahoney.guardianofearth;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,7 +16,7 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
     private enum Status { ROTATING_LEFT, NOT_ROTATING, ROTATING_RIGHT }
     private Status status;
 
-    SpaceshipObject() {
+    public SpaceshipObject() {
 
         triangle = new Path();
         paint = new Paint();
@@ -93,7 +94,8 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
     @Override
     public void draw(Canvas canvas) {
 
-        canvas.drawPath(triangle, paint);
+        canvas.drawBitmap(GameActivity.SPACESHIP_BITMAP, 0, 0, null);
+        //canvas.drawPath(triangle, paint);
 
     }
 
