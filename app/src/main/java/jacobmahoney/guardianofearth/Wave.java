@@ -9,11 +9,9 @@ public class Wave extends Observable implements UpdateableGameObject {
     public String name;
     private long timeUntilStart, time;
     private boolean running;
-    private GameController gameController;
 
-    Wave(GameController gameController, String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
+    Wave(String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
 
-        this.gameController = gameController;
         this.name = name;
         this.minRate = minRate;
         this.maxRate = maxRate;
@@ -27,13 +25,16 @@ public class Wave extends Observable implements UpdateableGameObject {
 
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void start() {
         running = true;
         timeUntilStart = System.currentTimeMillis() + 3000;
-        PopupText asdf = new PopupText(name, 3000);
-        gameController.registerUpdateableGameObject(asdf);
-        gameController.registerDrawableGameObject(asdf);
     }
+
+    // figure out how to remove this gameController up here ^
 
     @Override
     public void update(int screenWidth, int screenHeight) {

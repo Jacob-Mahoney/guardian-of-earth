@@ -30,9 +30,10 @@ public class GameActivity extends Activity implements Observer {
 
     }
 
-    public void switchToMainMenuActivity() {
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
+    public static void switchToMainMenuActivity() {
+        Intent intent = new Intent(MyApp.getAppContext(), MainMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        MyApp.getAppContext().startActivity(intent);
     }
 
     @Override

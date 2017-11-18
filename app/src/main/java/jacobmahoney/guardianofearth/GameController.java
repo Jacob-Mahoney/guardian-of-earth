@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
 import java.util.LinkedList;
@@ -11,12 +10,12 @@ import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameController extends Observable implements Observer {
+public class GameController implements Observer {
 
     private final int NUMBER_OF_WAVES = 10;
 
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
-    private enum Status {WAVE_EMITTING, WAVE_DONE_EMITTING, DEAD, DONE}
+    private enum Status {WAVE_STARTING, WAVE_DONE_EMITTING, DEAD, DONE}
     private Status status;
 
     private SpaceshipObject spaceship;
@@ -71,26 +70,30 @@ public class GameController extends Observable implements Observer {
 
         screenDrawer.unRegisterAll();
 
-        PopupText asdf = new PopupText("Game Over", 3000);
-        screenDrawer.registerUpdateableGameObject(asdf);
-        screenDrawer.registerDrawableGameObject(asdf);
+        PopupText text = new PopupText("Game Over", 3000);
+        screenDrawer.registerUpdateableGameObject(text);
+        screenDrawer.registerDrawableGameObject(text);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                screenDrawer.unRegisterAll();
-                setChanged();
-                notifyObservers();
+                GameActivity.switchToMainMenuActivity();
             }
         }, 3000);
 
     }
 
     private void startNextWave() {
+
         currentWave++;
         waves.get(currentWave).start();
-        status = Status.WAVE_EMITTING;
+
+        status = Status.WAVE_STARTING;
+        PopupText text = new PopupText(waves.get(currentWave).getName(), 3000);
+        screenDrawer.registerUpdateableGameObject(text);
+        screenDrawer.registerDrawableGameObject(text);
+
     }
 
     private void initializeWaves() {
@@ -102,25 +105,13 @@ public class GameController extends Observable implements Observer {
             if (i+1 == NUMBER_OF_WAVES) {
                 name += " (last wave)";
             }
-            Wave wave = new Wave(this, name, 1000, 3000, 2, 4, i+6);
+            Wave wave = new Wave(name, 1000, 3000, 2, 4, i+6);
             wave.addObserver(this);
             wave.addObserver(particleEmitter);
             screenDrawer.registerUpdateableGameObject(wave);
             waves.add(wave);
         }
 
-    }
-
-    public void registerUpdateableGameObject(UpdateableGameObject updateableGameObject) {
-        screenDrawer.registerUpdateableGameObject(updateableGameObject);
-    }
-
-    public void registerDrawableGameObject(DrawableGameObject drawableGameObject) {
-        screenDrawer.registerDrawableGameObject(drawableGameObject);
-    }
-
-    private void meteorSpawn(Particle m) {
-        particleEmitter.addParticle(m);
     }
 
     private void registerGameObjects() {
