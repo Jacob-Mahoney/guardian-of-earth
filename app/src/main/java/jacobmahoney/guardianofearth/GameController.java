@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
@@ -19,45 +18,35 @@ public class GameController extends Observable implements Observer {
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
     private enum Status {WAVE_EMITTING, WAVE_DONE_EMITTING, DEAD, DONE}
     private Status status;
+
     private SpaceshipObject spaceship;
     private SideButton leftButton;
     private SideButton rightButton;
+    private ScreenDrawer screenDrawer;
+    private ParticleEmitter particleEmitter;
+
     private List<Wave> waves = new LinkedList<>();
     private int currentWave;
     private final int LASER_SPEED = 15;
     private int lives;
     private int score;
 
-    private float textX, textY;
-    private Paint paint;
-
-    private static GameController instance = null;
-
-    private GameController() {
-        paint = new Paint();
-    }
-
-    public static GameController getInstance() {
-        if (instance == null) {
-            instance = new GameController();
-        }
-        return instance;
-    }
-
-    public void startNewGame() {
+    GameController(int screenWidth, int screenHeight) {
 
         spaceship = new SpaceshipObject();
         leftButton = new SideButton(SideButton.SIDE.LEFT_SIDE);
         rightButton = new SideButton(SideButton.SIDE.RIGHT_SIDE);
-        ParticleEmitter.getInstance().removeAllParticles();
-        ParticleEmitter.getInstance().addObserver(this);
+        screenDrawer = new ScreenDrawer(screenWidth, screenHeight);
+        particleEmitter = new ParticleEmitter();
+
+        particleEmitter.addObserver(this);
         registerGameObjects();
 
         lives = 3;
         currentWave = -1;
         score = 0;
 
-        waves.clear();
+        //waves.clear();
         initializeWaves();
         startNextWave();
 
@@ -80,15 +69,17 @@ public class GameController extends Observable implements Observer {
 
     private void endGame() {
 
-        ScreenDrawer.getInstance().unRegisterAll();
+        screenDrawer.unRegisterAll();
 
-        new PopupText("Game Over", 3000);
+        PopupText asdf = new PopupText("Game Over", 3000);
+        screenDrawer.registerUpdateableGameObject(asdf);
+        screenDrawer.registerDrawableGameObject(asdf);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ScreenDrawer.getInstance().unRegisterAll();
+                screenDrawer.unRegisterAll();
                 setChanged();
                 notifyObservers();
             }
@@ -111,27 +102,39 @@ public class GameController extends Observable implements Observer {
             if (i+1 == NUMBER_OF_WAVES) {
                 name += " (last wave)";
             }
-            Wave wave = new Wave(name, 1000, 3000, 2, 4, i+6);
+            Wave wave = new Wave(this, name, 1000, 3000, 2, 4, i+6);
             wave.addObserver(this);
-            ScreenDrawer.getInstance().registerUpdateableGameObject(wave);
+            screenDrawer.registerUpdateableGameObject(wave);
             waves.add(wave);
         }
 
     }
 
+    public void registerUpdateableGameObject(UpdateableGameObject updateableGameObject) {
+        screenDrawer.registerUpdateableGameObject(updateableGameObject);
+    }
+
+    public void registerDrawableGameObject(DrawableGameObject drawableGameObject) {
+        screenDrawer.registerDrawableGameObject(drawableGameObject);
+    }
+
+    public void addParticle(Particle p) {
+        particleEmitter.addParticle(p);
+    }
+
     private void registerGameObjects() {
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(spaceship);
-        ScreenDrawer.getInstance().registerDrawableGameObject(spaceship);
+        screenDrawer.registerUpdateableGameObject(spaceship);
+        screenDrawer.registerDrawableGameObject(spaceship);
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(leftButton);
-        ScreenDrawer.getInstance().registerDrawableGameObject(leftButton);
+        screenDrawer.registerUpdateableGameObject(leftButton);
+        screenDrawer.registerDrawableGameObject(leftButton);
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(rightButton);
-        ScreenDrawer.getInstance().registerDrawableGameObject(rightButton);
+        screenDrawer.registerUpdateableGameObject(rightButton);
+        screenDrawer.registerDrawableGameObject(rightButton);
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(ParticleEmitter.getInstance());
-        ScreenDrawer.getInstance().registerDrawableGameObject(ParticleEmitter.getInstance());
+        screenDrawer.registerUpdateableGameObject(particleEmitter);
+        screenDrawer.registerDrawableGameObject(particleEmitter);
 
     }
 
@@ -143,7 +146,7 @@ public class GameController extends Observable implements Observer {
         int dx = (int) (LASER_SPEED * Math.cos(Math.toRadians(rot)));
         int dy = -(int) (LASER_SPEED * Math.sin(Math.toRadians(rot)));
 
-        ParticleEmitter.getInstance().addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
+        particleEmitter.addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
 
     }
 
@@ -174,6 +177,14 @@ public class GameController extends Observable implements Observer {
             rightButton.inactive();
         }
 
+    }
+
+    public void updateGameObjects() {
+        screenDrawer.updateGameObjects();
+    }
+
+    public void drawGameObjects(Canvas canvas) {
+        screenDrawer.drawGameObjects(canvas);
     }
 
     @Override

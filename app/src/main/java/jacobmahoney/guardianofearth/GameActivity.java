@@ -26,7 +26,7 @@ public class GameActivity extends Activity implements Observer {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        GameController.getInstance().addObserver(this);
+        //GameController.getInstance().addObserver(this);
 
     }
 

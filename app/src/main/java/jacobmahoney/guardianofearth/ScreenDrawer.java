@@ -9,26 +9,10 @@ public class ScreenDrawer {
 
     private List<UpdateableGameObject> updateableGameObjects = new LinkedList<>();
     private List<DrawableGameObject> drawableGameObjects = new LinkedList<>();
-    private static ScreenDrawer instance = null;
     private int screenWidth, screenHeight;
 
-    private ScreenDrawer() {
-
-    }
-
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
-    public void setScreenWidth(int screenWidth) {
+    public ScreenDrawer(int screenWidth, int screenHeight) {
         this.screenWidth = screenWidth;
-    }
-
-    public void setScreenHeight(int screenHeight) {
         this.screenHeight = screenHeight;
     }
 
@@ -43,13 +27,6 @@ public class ScreenDrawer {
 
     public void registerDrawableGameObject(DrawableGameObject drawableGameObject) {
         drawableGameObjects.add(drawableGameObject);
-    }
-
-    public static ScreenDrawer getInstance() {
-        if (instance == null) {
-            instance = new ScreenDrawer();
-        }
-        return instance;
     }
 
     public void updateGameObjects() {

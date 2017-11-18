@@ -14,9 +14,8 @@ public class ParticleEmitter extends Observable implements UpdateableGameObject,
 
     private List<Particle> particles;
     private Paint paint;
-    private static ParticleEmitter instance = null;
 
-    private ParticleEmitter() {
+    public ParticleEmitter() {
 
         paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -28,13 +27,6 @@ public class ParticleEmitter extends Observable implements UpdateableGameObject,
 
     public void removeAllParticles() {
         particles.clear();
-    }
-
-    public static ParticleEmitter getInstance() {
-        if (instance == null) {
-            instance = new ParticleEmitter();
-        }
-        return instance;
     }
 
     public void addParticle(Particle p) {
@@ -69,13 +61,34 @@ public class ParticleEmitter extends Observable implements UpdateableGameObject,
 
         int meteors = 0;
 
-        Iterator<Particle> iter = particles.iterator();
+        /*Iterator<Particle> iter = particles.iterator();
         Particle p;
         while (iter.hasNext()) {
             p = iter.next();
             p.update();
             if (p instanceof Laser) {
-                Particle m = checkCollisions(p); // returns the collided with meteor if there was a collision, null if not
+                Particle m = checkCollisions(p); // returns the collided-with meteor if there was a collision, null if not
+                if (m != null) {
+                    particlesToRemove.add(p);
+                    particlesToRemove.add(m);
+                } else if (p.offscreen(screenWidth, screenHeight)) { // no collision with any meteors... still need to check if offscreen
+                    particlesToRemove.add(p);
+                }
+            } else {
+                meteors++;
+                if (p.offscreen(screenWidth, screenHeight)) { // if meteor went off screen, it meant it hit the earth, so need to alert GameController
+                    setChanged();
+                    notifyObservers(GameController.Event.METEOR_HIT_EARTH);
+                    particlesToRemove.add(p);
+                }
+            }
+        }*/
+
+        for (Iterator<Particle> iter = particles.iterator(); iter.hasNext();) {
+            Particle p = iter.next();
+            p.update();
+            if (p instanceof Laser) {
+                Particle m = checkCollisions(p); // returns the collided-with meteor if there was a collision, null if not
                 if (m != null) {
                     particlesToRemove.add(p);
                     particlesToRemove.add(m);

@@ -16,6 +16,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private int screenWidth;
     private int screenHeight;
+    private GameController gameController;
 
     public GamePanel(Context context) {
 
@@ -24,10 +25,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
         getScreenSize(context);
 
-        ScreenDrawer.getInstance().setScreenWidth(screenWidth);
-        ScreenDrawer.getInstance().setScreenHeight(screenHeight);
-
-        GameController.getInstance().startNewGame();
+        this.gameController = new GameController(screenWidth, screenHeight);
 
     }
 
@@ -77,11 +75,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                GameController.getInstance().actionDownEvent((int)event.getX(index), (int)event.getY(index));
+                gameController.actionDownEvent((int)event.getX(index), (int)event.getY(index));
                 return true;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                GameController.getInstance().actionUpEvent((int)event.getX(index), (int)event.getY(index));
+                gameController.actionUpEvent((int)event.getX(index), (int)event.getY(index));
                 return true;
         }
 
@@ -90,13 +88,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
-        ScreenDrawer.getInstance().updateGameObjects();
+        gameController.updateGameObjects();
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        ScreenDrawer.getInstance().drawGameObjects(canvas);
+        gameController.drawGameObjects(canvas);
     }
 
 }

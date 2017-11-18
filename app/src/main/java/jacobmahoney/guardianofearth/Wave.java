@@ -6,12 +6,14 @@ import java.util.Random;
 public class Wave extends Observable implements UpdateableGameObject {
 
     private int minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors, counter;
-    private String name;
+    public String name;
     private long timeUntilStart, time;
-    private boolean started;
+    private boolean running;
+    private GameController gameController;
 
-    Wave(String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
+    Wave(GameController gameController, String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
 
+        this.gameController = gameController;
         this.name = name;
         this.minRate = minRate;
         this.maxRate = maxRate;
@@ -21,20 +23,22 @@ public class Wave extends Observable implements UpdateableGameObject {
 
         counter = 0;
         time = -1;
-        started = false;
+        running = false;
 
     }
 
     public void start() {
-        started = true;
+        running = true;
         timeUntilStart = System.currentTimeMillis() + 3000;
-        new PopupText(name, 3000);
+        PopupText asdf = new PopupText(name, 3000);
+        gameController.registerUpdateableGameObject(asdf);
+        gameController.registerDrawableGameObject(asdf);
     }
 
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        if (System.currentTimeMillis() >= timeUntilStart && started) {
+        if (System.currentTimeMillis() >= timeUntilStart && running) {
 
             if (time == -1) {
                 time = System.currentTimeMillis();
@@ -63,11 +67,12 @@ public class Wave extends Observable implements UpdateableGameObject {
                     max = maxSpeed;
                     rand = r.nextInt(max-min) + min;
 
-                    ParticleEmitter.getInstance().addParticle(new Meteor((int)x, (int)y, 0, rand));
+                    gameController.addParticle(new Meteor((int)x, (int)y, 0, rand));
 
                 }
 
             } else {
+                running = false;
                 setChanged();
                 notifyObservers(GameController.Event.METEORS_DONE_EMITTING);
             }

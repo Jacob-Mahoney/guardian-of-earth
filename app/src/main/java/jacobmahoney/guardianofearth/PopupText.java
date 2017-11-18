@@ -20,8 +20,6 @@ public class PopupText implements UpdateableGameObject, DrawableGameObject {
         paint = new Paint();
         textPos = new Point();
         stopTime = System.currentTimeMillis() + length;
-        ScreenDrawer.getInstance().registerUpdateableGameObject(this);
-        ScreenDrawer.getInstance().registerDrawableGameObject(this);
 
     }
 
