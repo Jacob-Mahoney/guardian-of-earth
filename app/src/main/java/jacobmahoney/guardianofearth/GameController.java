@@ -104,6 +104,7 @@ public class GameController extends Observable implements Observer {
             }
             Wave wave = new Wave(this, name, 1000, 3000, 2, 4, i+6);
             wave.addObserver(this);
+            wave.addObserver(particleEmitter);
             screenDrawer.registerUpdateableGameObject(wave);
             waves.add(wave);
         }
@@ -118,8 +119,8 @@ public class GameController extends Observable implements Observer {
         screenDrawer.registerDrawableGameObject(drawableGameObject);
     }
 
-    public void addParticle(Particle p) {
-        particleEmitter.addParticle(p);
+    private void meteorSpawn(Particle m) {
+        particleEmitter.addParticle(m);
     }
 
     private void registerGameObjects() {

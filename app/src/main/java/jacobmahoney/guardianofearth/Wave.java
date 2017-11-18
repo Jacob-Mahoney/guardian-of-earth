@@ -67,7 +67,8 @@ public class Wave extends Observable implements UpdateableGameObject {
                     max = maxSpeed;
                     rand = r.nextInt(max-min) + min;
 
-                    gameController.addParticle(new Meteor((int)x, (int)y, 0, rand));
+                    setChanged();
+                    notifyObservers(new Meteor((int)x, (int)y, 0, rand));
 
                 }
 

@@ -9,8 +9,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 
-public class ParticleEmitter extends Observable implements UpdateableGameObject, DrawableGameObject {
+public class ParticleEmitter extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
 
     private List<Particle> particles;
     private Paint paint;
@@ -118,6 +119,14 @@ public class ParticleEmitter extends Observable implements UpdateableGameObject,
     public void draw(Canvas canvas) {
         for (int i = 0; i < particles.size(); i++) {
             canvas.drawRect(particles.get(i), paint);
+        }
+    }
+
+    // observes signals from Wave class, basically every time this function is called, a meteor needs to be spawned
+    @Override
+    public void update(Observable observable, Object arg) {
+        if (arg instanceof Particle) {
+            addParticle((Particle) arg);
         }
     }
 
