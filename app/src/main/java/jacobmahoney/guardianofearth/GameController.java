@@ -12,7 +12,7 @@ import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameController extends Observable implements Observer, UpdateableGameObject, DrawableGameObject {
+public class GameController extends Observable implements Observer {
 
     private final int NUMBER_OF_WAVES = 10;
 
@@ -26,6 +26,7 @@ public class GameController extends Observable implements Observer, UpdateableGa
     private int currentWave;
     private final int LASER_SPEED = 15;
     private int lives;
+    private int score;
 
     private float textX, textY;
     private Paint paint;
@@ -54,6 +55,7 @@ public class GameController extends Observable implements Observer, UpdateableGa
 
         lives = 3;
         currentWave = -1;
+        score = 0;
 
         waves.clear();
         initializeWaves();
@@ -72,10 +74,6 @@ public class GameController extends Observable implements Observer, UpdateableGa
     // and also when having to add add meteor particle
     // have to make addparticle and registergameobject functions static...
 
-    // make popuptext class
-    // which takes in parameter for its name and for the length it should be on screen
-    // can be used to display wave start messages and gamecontroller end message
-
     // to pause game
     // place boolean "paused" in gamepanel or screendrawer
     // and place if statement based on that boolean in update() function
@@ -84,8 +82,7 @@ public class GameController extends Observable implements Observer, UpdateableGa
 
         ScreenDrawer.getInstance().unRegisterAll();
 
-        ScreenDrawer.getInstance().registerUpdateableGameObject(this);
-        ScreenDrawer.getInstance().registerDrawableGameObject(this);
+        new PopupText("Game Over", 3000);
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -117,7 +114,6 @@ public class GameController extends Observable implements Observer, UpdateableGa
             Wave wave = new Wave(name, 1000, 3000, 2, 4, i+6);
             wave.addObserver(this);
             ScreenDrawer.getInstance().registerUpdateableGameObject(wave);
-            ScreenDrawer.getInstance().registerDrawableGameObject(wave);
             waves.add(wave);
         }
 
@@ -181,21 +177,6 @@ public class GameController extends Observable implements Observer, UpdateableGa
     }
 
     @Override
-    public void update(int screenWidth, int screenHeight) {
-        textX = screenWidth / 2;
-        textY = (int) ((screenHeight / 2) - ((paint.descent() + paint.ascent()) / 2));
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(0.04f * screenWidth);
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTypeface(LoadingActivity.getFont());
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawText("Game Over", textX, textY, paint);
-    }
-
-    @Override
     public void update(Observable observable, Object arg) {
 
         if (arg instanceof Event) {
@@ -205,17 +186,15 @@ public class GameController extends Observable implements Observer, UpdateableGa
             switch (event) {
                 case METEORS_DONE_EMITTING: {
                     status = Status.WAVE_DONE_EMITTING;
-                    Log.d("GameController", "done emitting");
                     break;
                 }
                 case METEOR_DESTROYED: {
-                    Log.d("GameController", "meteor destroyed");
+                    score += 10;
                     break;
                 }
                 case METEOR_HIT_EARTH: {
                     lives--;
                     if (lives == 0) {
-                        Log.d("GameController", "oh dear, you're dead");
                         status = Status.DEAD;
                         endGame();
                     }

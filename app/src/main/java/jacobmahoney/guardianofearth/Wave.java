@@ -1,70 +1,77 @@
 package jacobmahoney.guardianofearth;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-
 import java.util.Observable;
-import java.util.Observer;
+import java.util.Random;
 
-public class Wave extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
+public class Wave extends Observable implements UpdateableGameObject {
 
+    private int minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors, counter;
     private String name;
-    private MeteorShower shower;
-    private enum WaveStatus {NOT_STARTED, STARTING, IN_PROGRESS}
-    private WaveStatus status;
-    private float textX, textY;
-    private Paint paint;
-    private long timeUntilStart;
+    private long timeUntilStart, time;
+    private boolean started;
 
     Wave(String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
 
         this.name = name;
-        shower = new MeteorShower(minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors);
-        ScreenDrawer.getInstance().registerUpdateableGameObject(shower);
-        shower.addObserver(this);
-        paint = new Paint();
-        status = WaveStatus.NOT_STARTED;
+        this.minRate = minRate;
+        this.maxRate = maxRate;
+        this.minSpeed = minSpeed;
+        this.maxSpeed = maxSpeed;
+        this.numberOfMeteors = numberOfMeteors;
+
+        counter = 0;
+        time = -1;
+        started = false;
 
     }
 
     public void start() {
+        started = true;
         timeUntilStart = System.currentTimeMillis() + 3000;
-        status = WaveStatus.STARTING;
-    }
-
-    @Override
-    public void update(Observable observable, Object arg) {
-        setChanged();
-        notifyObservers(GameController.Event.METEORS_DONE_EMITTING);
+        new PopupText(name, 3000);
     }
 
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        if (status == WaveStatus.STARTING) {
-            if (System.currentTimeMillis() >= timeUntilStart) {
-                shower.start();
-                status = WaveStatus.IN_PROGRESS;
+        if (System.currentTimeMillis() >= timeUntilStart && started) {
+
+            if (time == -1) {
+                time = System.currentTimeMillis();
+            }
+
+            if (counter < numberOfMeteors) {
+
+                if (System.currentTimeMillis() > time) {
+
+                    counter++;
+
+                    Random r;
+                    int min, max, rand;
+
+                    double x = Math.random() * screenWidth;
+                    double y = -50;
+
+                    r = new Random();
+                    min = minRate;
+                    max = maxRate;
+                    rand = r.nextInt(max-min) + min;
+                    time += rand;
+
+                    r = new Random();
+                    min = minSpeed;
+                    max = maxSpeed;
+                    rand = r.nextInt(max-min) + min;
+
+                    ParticleEmitter.getInstance().addParticle(new Meteor((int)x, (int)y, 0, rand));
+
+                }
+
             } else {
-                textX = screenWidth / 2;
-                textY = (int) ((screenHeight / 2) - ((paint.descent() + paint.ascent()) / 2));
-                paint.setColor(Color.WHITE);
-                paint.setTextSize(0.04f * screenWidth);
-                paint.setTextAlign(Paint.Align.CENTER);
-                paint.setTypeface(LoadingActivity.getFont());
+                setChanged();
+                notifyObservers(GameController.Event.METEORS_DONE_EMITTING);
             }
-        }
 
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-
-        if (status == WaveStatus.STARTING) {
-            if (System.currentTimeMillis() < timeUntilStart) {
-                canvas.drawText(name, textX, textY, paint);
-            }
         }
 
     }
