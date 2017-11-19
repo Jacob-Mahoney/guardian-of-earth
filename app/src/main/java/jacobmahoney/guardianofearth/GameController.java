@@ -3,7 +3,6 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
-import android.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class GameController implements Observer {
     private SideButton rightButton;
     private HUD hud;
     private ScreenDrawer screenDrawer;
-    private ParticleEmitter particleEmitter;
+    private ParticleHandler particleHandler;
 
     private List<Wave> waves = new LinkedList<>();
     private int currentWave;
@@ -39,9 +38,9 @@ public class GameController implements Observer {
         rightButton = new SideButton(SideButton.SIDE.RIGHT_SIDE);
         hud = new HUD();
         screenDrawer = new ScreenDrawer(screenWidth, screenHeight);
-        particleEmitter = new ParticleEmitter();
+        particleHandler = new ParticleHandler();
 
-        particleEmitter.addObserver(this);
+        particleHandler.addObserver(this);
         registerGameObjects();
 
         lives = 3;
@@ -102,7 +101,7 @@ public class GameController implements Observer {
             }
             Wave wave = new Wave(name, 1000, 3000, 2, 4, i+6);
             wave.addObserver(this);
-            wave.addObserver(particleEmitter);
+            wave.addObserver(particleHandler);
             screenDrawer.registerUpdateableGameObject(wave);
             waves.add(wave);
         }
@@ -123,8 +122,8 @@ public class GameController implements Observer {
         screenDrawer.registerUpdateableGameObject(hud);
         screenDrawer.registerDrawableGameObject(hud);
 
-        screenDrawer.registerUpdateableGameObject(particleEmitter);
-        screenDrawer.registerDrawableGameObject(particleEmitter);
+        screenDrawer.registerUpdateableGameObject(particleHandler);
+        screenDrawer.registerDrawableGameObject(particleHandler);
 
     }
 
@@ -138,7 +137,7 @@ public class GameController implements Observer {
         int dx = (int) (LASER_SPEED * Math.cos(Math.toRadians(rot)));
         int dy = -(int) (LASER_SPEED * Math.sin(Math.toRadians(rot)));
 
-        particleEmitter.addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
+        particleHandler.addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
 
     }
 

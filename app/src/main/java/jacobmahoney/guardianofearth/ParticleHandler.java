@@ -3,31 +3,27 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
-import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ParticleEmitter extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
+public class ParticleHandler extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
 
     private List<Particle> particles;
     private Paint paint;
 
-    public ParticleEmitter() {
+    public ParticleHandler() {
 
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
 
-        particles = new ArrayList<>();
+        particles = new CopyOnWriteArrayList<>();
 
-    }
-
-    public void removeAllParticles() {
-        particles.clear();
     }
 
     public void addParticle(Particle p) {
@@ -56,37 +52,14 @@ public class ParticleEmitter extends Observable implements UpdateableGameObject,
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        // function called by game loop (many times a second)
-
         List<Particle> particlesToRemove = new LinkedList<>();
 
         int meteors = 0;
 
-        /*Iterator<Particle> iter = particles.iterator();
+        Iterator<Particle> iter = particles.iterator();
         Particle p;
         while (iter.hasNext()) {
             p = iter.next();
-            p.update();
-            if (p instanceof Laser) {
-                Particle m = checkCollisions(p); // returns the collided-with meteor if there was a collision, null if not
-                if (m != null) {
-                    particlesToRemove.add(p);
-                    particlesToRemove.add(m);
-                } else if (p.offscreen(screenWidth, screenHeight)) { // no collision with any meteors... still need to check if offscreen
-                    particlesToRemove.add(p);
-                }
-            } else {
-                meteors++;
-                if (p.offscreen(screenWidth, screenHeight)) { // if meteor went off screen, it meant it hit the earth, so need to alert GameController
-                    setChanged();
-                    notifyObservers(GameController.Event.METEOR_HIT_EARTH);
-                    particlesToRemove.add(p);
-                }
-            }
-        }*/
-
-        for (Iterator<Particle> iter = particles.iterator(); iter.hasNext();) {
-            Particle p = iter.next();
             p.update();
             if (p instanceof Laser) {
                 Particle m = checkCollisions(p); // returns the collided-with meteor if there was a collision, null if not
