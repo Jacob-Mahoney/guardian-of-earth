@@ -1,51 +1,40 @@
 package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.RectF;
-import android.util.Pair;
-
-import java.util.Observable;
-import java.util.Observer;
 
 public class HUD implements UpdateableGameObject, DrawableGameObject {
 
-    private Paint paint;
-    private Point scoreTextPos;
-    private Point livesTextPos;
+    private CanvasText score;
+    private CanvasText lives;
 
     public HUD() {
 
-        paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
-
-        scoreTextPos = new Point();
-        livesTextPos = new Point();
+        score = new CanvasText("", CanvasText.HorizontalAlignment.LEFT, CanvasText.VerticleAlignment.TOP);
+        lives = new CanvasText("", CanvasText.HorizontalAlignment.RIGHT, CanvasText.VerticleAlignment.TOP);
 
     }
 
     @Override
     public void update(int screenWidth, int screenHeight) {
 
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(0.025f * screenWidth);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setTypeface(LoadingActivity.getFont());
+        score.setText("score: " + GameController.getScore());
+        lives.setText("lives: " + GameController.getLives());
 
-        scoreTextPos.set(40, 70);
-        livesTextPos.set(screenWidth - 200, 70);
+        score.setTextSize(0.025f * screenWidth);
+        score.setX(40);
+        score.setY(40);
+
+        lives.setTextSize(0.025f * screenWidth);
+        lives.setX(screenWidth-40);
+        lives.setY(40);
 
     }
 
     @Override
     public void draw(Canvas canvas) {
 
-        canvas.drawText("score: " + GameController.getScore(), scoreTextPos.x, scoreTextPos.y, paint);
-        canvas.drawText("lives: " + GameController.getLives(), livesTextPos.x, livesTextPos.y, paint);
+        canvas.drawText(score.getText(), score.getX(), score.getY(), score.getPaint());
+        canvas.drawText(lives.getText(), lives.getX(), lives.getY(), lives.getPaint());
 
     }
 

@@ -3,7 +3,6 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +28,13 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
     public void addParticle(Particle p) {
         particles.add(p);
     }
+
+    // make function for getting the last meteor destroyed or the position of it
+    // so when game controller gets that event, it can call the function
+    // to display a popup text at that meteor's location
+
+    // also could make function for getting the last meteor that hit earth
+    // for the same reason
 
     private Particle checkCollisions(Particle laser) {
 

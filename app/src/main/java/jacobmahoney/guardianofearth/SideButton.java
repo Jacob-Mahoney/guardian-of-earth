@@ -13,10 +13,10 @@ public class SideButton implements UpdateableGameObject, DrawableGameObject {
 
     private boolean active;
 
-    public enum SIDE {LEFT_SIDE, RIGHT_SIDE}
-    private SIDE side;
+    public enum Side {LEFT_SIDE, RIGHT_SIDE}
+    private Side side;
 
-    public SideButton(SIDE side) {
+    public SideButton(Side side) {
 
         this.side = side;
         active = false;
@@ -45,7 +45,7 @@ public class SideButton implements UpdateableGameObject, DrawableGameObject {
         float top = 0;
         float bottom = screenHeight;
         float left, right;
-        if (side == SIDE.LEFT_SIDE) {
+        if (side == Side.LEFT_SIDE) {
             left = -(float)(0.25*screenWidth);
             right = (float)0.25*screenWidth;
         } else {
@@ -55,7 +55,7 @@ public class SideButton implements UpdateableGameObject, DrawableGameObject {
 
         RectF oval = new RectF(left, top, right, bottom);
         path.reset();
-        if (side == SIDE.LEFT_SIDE) {
+        if (side == Side.LEFT_SIDE) {
             path.arcTo(oval, -90, 180, true);
         } else {
             path.arcTo(oval, 90, 180, true);

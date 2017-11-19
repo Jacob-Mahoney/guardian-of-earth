@@ -2,21 +2,19 @@ package jacobmahoney.guardianofearth;
 
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.util.Log;
+import android.os.Handler;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameController implements Observer {
 
     private final int NUMBER_OF_WAVES = 10;
 
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
-    private enum Status {WAVE_STARTING, WAVE_DONE_EMITTING, DEAD, DONE}
+    private enum Status {WAVE_IN_PROGRESS, WAVE_DONE_EMITTING, DEAD, DONE}
     private Status status;
 
     private SpaceshipObject spaceship;
@@ -28,14 +26,20 @@ public class GameController implements Observer {
 
     private List<Wave> waves = new LinkedList<>();
     private int currentWave;
+
+    private int screenWidth, screenHeight;
+
     private final int LASER_SPEED = 15;
     private static int score, lives;
 
     GameController(int screenWidth, int screenHeight) {
 
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
         spaceship = new SpaceshipObject();
-        leftButton = new SideButton(SideButton.SIDE.LEFT_SIDE);
-        rightButton = new SideButton(SideButton.SIDE.RIGHT_SIDE);
+        leftButton = new SideButton(SideButton.Side.LEFT_SIDE);
+        rightButton = new SideButton(SideButton.Side.RIGHT_SIDE);
         hud = new HUD();
         screenDrawer = new ScreenDrawer(screenWidth, screenHeight);
         particleHandler = new ParticleHandler();
@@ -60,33 +64,31 @@ public class GameController implements Observer {
         return lives;
     }
 
-    private void endGame() {
-
-        screenDrawer.unRegisterAll();
-
-        PopupText text = new PopupText("Game Over", 3000);
-        screenDrawer.registerUpdateableGameObject(text);
-        screenDrawer.registerDrawableGameObject(text);
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                GameActivity.switchToMainMenuActivity();
-            }
-        }, 3000);
-
-    }
-
     private void startNextWave() {
 
         currentWave++;
         waves.get(currentWave).start();
 
-        status = Status.WAVE_STARTING;
-        PopupText text = new PopupText(waves.get(currentWave).getName(), 3000);
-        screenDrawer.registerUpdateableGameObject(text);
+        status = Status.WAVE_IN_PROGRESS;
+        PopupText text = new PopupText(waves.get(currentWave).getName(), screenWidth/2, screenHeight/2, 0.04f * screenWidth, 3000);
         screenDrawer.registerDrawableGameObject(text);
+
+    }
+
+    private void endGame(String message) {
+
+        screenDrawer.unRegisterAll();
+
+        PopupText text = new PopupText(message, screenWidth/2, screenHeight/2, 0.04f * screenWidth, 3000);
+        screenDrawer.registerDrawableGameObject(text);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GameActivity.switchToMainMenuActivity();
+            }
+        }, 3000);
 
     }
 
@@ -204,7 +206,7 @@ public class GameController implements Observer {
                     lives--;
                     if (lives == 0) {
                         status = Status.DEAD;
-                        endGame();
+                        endGame("Game Over (Final score: " + score + ")");
                     }
                     break;
                 }
@@ -213,9 +215,9 @@ public class GameController implements Observer {
                         if (currentWave+1 <= NUMBER_OF_WAVES) {
                             startNextWave();
                         } else {
-                            Log.d("GameController", "game is finished!");
+                            //Log.d("GameController", "game is finished!");
                             status = Status.DONE;
-                            endGame();
+                            endGame("You won! (Final score: " + score + ")");
                         }
                     }
                     break;

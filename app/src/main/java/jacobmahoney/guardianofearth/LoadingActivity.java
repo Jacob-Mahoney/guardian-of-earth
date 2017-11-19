@@ -4,52 +4,51 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class LoadingActivity extends Activity {
 
-    private static Typeface font;
-
-    public static Typeface getFont() {
-        return font;
-    }
+    public final static Typeface font = Typeface.createFromAsset(MyApp.getAppContext().getAssets(), "fonts/SquareFont.ttf");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        font = Typeface.createFromAsset(getAssets(), "fonts/SquareFont.ttf");
 
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.loading_layout);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         TextView txt = findViewById(R.id.loading_text);
         txt.setTypeface(font);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 switchToMainMenuActivity();
             }
         }, 3000);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+    }
+
+    // making sure status and nav bars stay hidden
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        }
     }
 
     public void switchToMainMenuActivity() {
-
         Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);
-
     }
 
 }
