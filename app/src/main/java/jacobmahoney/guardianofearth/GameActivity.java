@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.util.Observable;
-import java.util.Observer;
+public class GameActivity extends Activity {
 
-public class GameActivity extends Activity implements Observer {
-
-    public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "spaceship.png");
+    public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/spaceship.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +23,12 @@ public class GameActivity extends Activity implements Observer {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        //GameController.getInstance().addObserver(this);
-
     }
 
     public static void switchToMainMenuActivity() {
         Intent intent = new Intent(MyApp.getAppContext(), MainMenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         MyApp.getAppContext().startActivity(intent);
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        switchToMainMenuActivity();
     }
 
 }

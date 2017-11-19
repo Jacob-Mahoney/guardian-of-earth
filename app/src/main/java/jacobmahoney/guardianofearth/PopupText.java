@@ -28,11 +28,11 @@ public class PopupText implements UpdateableGameObject, DrawableGameObject {
 
         if (System.currentTimeMillis() <= stopTime) {
 
-            textPos = Utility.getCenteredTextPosition(screenWidth, screenHeight, paint);
             paint.setColor(Color.WHITE);
             paint.setTextSize(0.04f * screenWidth);
             paint.setTextAlign(Paint.Align.CENTER);
             paint.setTypeface(LoadingActivity.getFont());
+            textPos = Utility.getCenteredTextPosition(screenWidth, screenHeight, paint);
 
         }
 

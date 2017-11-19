@@ -3,6 +3,8 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
+import android.util.Pair;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
@@ -21,20 +23,21 @@ public class GameController implements Observer {
     private SpaceshipObject spaceship;
     private SideButton leftButton;
     private SideButton rightButton;
+    private HUD hud;
     private ScreenDrawer screenDrawer;
     private ParticleEmitter particleEmitter;
 
     private List<Wave> waves = new LinkedList<>();
     private int currentWave;
     private final int LASER_SPEED = 15;
-    private int lives;
-    private int score;
+    private static int score, lives;
 
     GameController(int screenWidth, int screenHeight) {
 
         spaceship = new SpaceshipObject();
         leftButton = new SideButton(SideButton.SIDE.LEFT_SIDE);
         rightButton = new SideButton(SideButton.SIDE.RIGHT_SIDE);
+        hud = new HUD();
         screenDrawer = new ScreenDrawer(screenWidth, screenHeight);
         particleEmitter = new ParticleEmitter();
 
@@ -45,26 +48,18 @@ public class GameController implements Observer {
         currentWave = -1;
         score = 0;
 
-        //waves.clear();
         initializeWaves();
         startNextWave();
 
     }
 
-    // make gamecontroller, particleemitter, and screendrawer not singletons
-    // can add addparticle function and registergameobject function in gamecontroller class
-    // only problem is need to figure out how to make gamecontroller signal gamepanel
-    // and make gamepanel signal gameactivity when the game ends
-    // gamepanel already extends surfaceview so it cant extend observable to get signal from gamecontroller
+    public static int getScore() {
+        return score;
+    }
 
-    // may run into problem making particleemitter and screendrawer not singletons
-    // when having to register meteorshower in each wave (consider making wave handle the shower and discard meteorshower)
-    // and also when having to add add meteor particle
-    // have to make addparticle and registergameobject functions static...
-
-    // to pause game
-    // place boolean "paused" in gamepanel or screendrawer
-    // and place if statement based on that boolean in update() function
+    public static int getLives() {
+        return lives;
+    }
 
     private void endGame() {
 
@@ -125,6 +120,9 @@ public class GameController implements Observer {
         screenDrawer.registerUpdateableGameObject(rightButton);
         screenDrawer.registerDrawableGameObject(rightButton);
 
+        screenDrawer.registerUpdateableGameObject(hud);
+        screenDrawer.registerDrawableGameObject(hud);
+
         screenDrawer.registerUpdateableGameObject(particleEmitter);
         screenDrawer.registerDrawableGameObject(particleEmitter);
 
@@ -135,6 +133,8 @@ public class GameController implements Observer {
         // using utility function to determine the nose of the spaceship based on current rotation of the spaceship
         double rot = 90 - spaceship.getRotation();
         Point spaceshipNose = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
+
+        // calculating x and y components of velocity for the laser based on spaceship rotation
         int dx = (int) (LASER_SPEED * Math.cos(Math.toRadians(rot)));
         int dy = -(int) (LASER_SPEED * Math.sin(Math.toRadians(rot)));
 
@@ -143,6 +143,8 @@ public class GameController implements Observer {
     }
 
     public void actionDownEvent(int x, int y) {
+
+        // called when user presses down on the screen, x and y location passed in
 
         if (leftButton.contains(x, y)) {
             spaceship.rotateLeft();
@@ -159,6 +161,8 @@ public class GameController implements Observer {
     }
 
     public void actionUpEvent(int x, int y) {
+
+        // called when user releases press on the screen, x and y location passed in
 
         if (leftButton.contains(x, y)) {
             spaceship.rotateStop();
@@ -181,6 +185,8 @@ public class GameController implements Observer {
 
     @Override
     public void update(Observable observable, Object arg) {
+
+        // observer function for receiving signals from particle emitter and wave
 
         if (arg instanceof Event) {
 

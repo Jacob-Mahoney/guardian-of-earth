@@ -13,7 +13,7 @@ public class SideButton implements UpdateableGameObject, DrawableGameObject {
 
     private boolean active;
 
-    public static enum SIDE {LEFT_SIDE, RIGHT_SIDE}
+    public enum SIDE {LEFT_SIDE, RIGHT_SIDE}
     private SIDE side;
 
     public SideButton(SIDE side) {

@@ -34,8 +34,6 @@ public class Wave extends Observable implements UpdateableGameObject {
         timeUntilStart = System.currentTimeMillis() + 3000;
     }
 
-    // figure out how to remove this gameController up here ^
-
     @Override
     public void update(int screenWidth, int screenHeight) {
 
