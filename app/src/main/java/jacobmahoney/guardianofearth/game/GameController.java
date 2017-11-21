@@ -1,13 +1,24 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.game;
 
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Handler;
+import android.os.Looper;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
+import jacobmahoney.guardianofearth.utility.Utility;
+import jacobmahoney.guardianofearth.basic_game_objects.Wave;
+import jacobmahoney.guardianofearth.activities.GameActivity;
+import jacobmahoney.guardianofearth.basic_game_objects.PopupText;
+import jacobmahoney.guardianofearth.basic_game_objects.SideButton;
+import jacobmahoney.guardianofearth.basic_game_objects.SpaceshipObject;
+import jacobmahoney.guardianofearth.particles.Laser;
+import jacobmahoney.guardianofearth.system_game_objects.HUD;
+import jacobmahoney.guardianofearth.system_game_objects.ParticleHandler;
 
 public class GameController implements Observer {
 
@@ -89,7 +100,7 @@ public class GameController implements Observer {
 
         newPopupText(message, screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
-        final Handler handler = new Handler();
+        final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

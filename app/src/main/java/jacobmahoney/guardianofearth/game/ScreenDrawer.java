@@ -1,9 +1,12 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.game;
 
 import android.graphics.Canvas;
-import android.graphics.Typeface;
+
 import java.util.LinkedList;
 import java.util.List;
+
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 
 public class ScreenDrawer {
 

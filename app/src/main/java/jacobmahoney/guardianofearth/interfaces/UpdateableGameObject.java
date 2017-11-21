@@ -1,4 +1,4 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.interfaces;
 
 public interface UpdateableGameObject {
 

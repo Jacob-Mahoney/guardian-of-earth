@@ -1,4 +1,4 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.system_game_objects;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import jacobmahoney.guardianofearth.game.GameController;
+import jacobmahoney.guardianofearth.particles.Laser;
+import jacobmahoney.guardianofearth.particles.Meteor;
+import jacobmahoney.guardianofearth.particles.Particle;
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 
 public class ParticleHandler extends Observable implements UpdateableGameObject, DrawableGameObject, Observer {
 

@@ -1,10 +1,8 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.game;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;

@@ -1,37 +1,29 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
-public class LoadingActivity extends Activity {
+import jacobmahoney.guardianofearth.game.GamePanel;
+import jacobmahoney.guardianofearth.app.MyApp;
+import jacobmahoney.guardianofearth.utility.Utility;
 
-    public final static Typeface font = Typeface.createFromAsset(MyApp.getAppContext().getAssets(), "fonts/SquareFont.ttf");
+public class GameActivity extends Activity {
+
+    public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/spaceship.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.loading_layout);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        TextView txt = findViewById(R.id.loading_text);
-        txt.setTypeface(font);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switchToMainMenuActivity();
-            }
-        }, 3000);
+        setContentView(new GamePanel(this)); // sets the content view of this game activity to the gamepanel
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -46,9 +38,10 @@ public class LoadingActivity extends Activity {
         }
     }
 
-    public void switchToMainMenuActivity() {
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
+    public static void switchToMainMenuActivity() {
+        Intent intent = new Intent(MyApp.getAppContext(), MainMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        MyApp.getAppContext().startActivity(intent);
     }
 
 }

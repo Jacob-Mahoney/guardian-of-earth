@@ -1,26 +1,31 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
-public class GameActivity extends Activity {
+import jacobmahoney.guardianofearth.R;
 
-    public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/spaceship.png");
+public class MainMenuActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.main_menu_layout);
 
-        setContentView(new GamePanel(this)); // sets the content view of this game activity to the gamepanel
+        TextView txt = findViewById(R.id.title);
+        txt.setTypeface(LoadingActivity.font);
+        txt = findViewById(R.id.play_game);
+        txt.setTypeface(LoadingActivity.font);
+        txt = findViewById(R.id.settings);
+        txt.setTypeface(LoadingActivity.font);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -35,10 +40,9 @@ public class GameActivity extends Activity {
         }
     }
 
-    public static void switchToMainMenuActivity() {
-        Intent intent = new Intent(MyApp.getAppContext(), MainMenuActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        MyApp.getAppContext().startActivity(intent);
+    public void switchToGameActivity(View view) {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 
 }

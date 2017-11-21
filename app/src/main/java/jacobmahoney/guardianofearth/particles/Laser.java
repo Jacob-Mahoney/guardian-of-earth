@@ -1,8 +1,8 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.particles;
 
 public class Laser extends Particle {
     
-    Laser(int x, int y, int dx, int dy) {
+    public Laser(int x, int y, int dx, int dy) {
 
         super(x, y, dx, dy, 12, 12);
 

@@ -1,4 +1,4 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.game;
 
 import android.graphics.Canvas;
 import android.util.Log;

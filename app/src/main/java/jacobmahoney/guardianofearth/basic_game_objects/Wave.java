@@ -1,7 +1,11 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.basic_game_objects;
 
 import java.util.Observable;
 import java.util.Random;
+
+import jacobmahoney.guardianofearth.game.GameController;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
+import jacobmahoney.guardianofearth.particles.Meteor;
 
 public class Wave extends Observable implements UpdateableGameObject {
 
@@ -10,7 +14,7 @@ public class Wave extends Observable implements UpdateableGameObject {
     private long timeUntilStart, time;
     private boolean running;
 
-    Wave(String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
+    public Wave(String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors) {
 
         this.name = name;
         this.minRate = minRate;

@@ -1,15 +1,21 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class MainMenuActivity extends Activity {
+import jacobmahoney.guardianofearth.app.MyApp;
+import jacobmahoney.guardianofearth.R;
+
+public class LoadingActivity extends Activity {
+
+    public final static Typeface font = Typeface.createFromAsset(MyApp.getAppContext().getAssets(), "fonts/SquareFont.ttf");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,14 +23,18 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.main_menu_layout);
+        setContentView(R.layout.loading_layout);
 
-        TextView txt = findViewById(R.id.title);
-        txt.setTypeface(LoadingActivity.font);
-        txt = findViewById(R.id.play_game);
-        txt.setTypeface(LoadingActivity.font);
-        txt = findViewById(R.id.settings);
-        txt.setTypeface(LoadingActivity.font);
+        TextView txt = findViewById(R.id.loading_text);
+        txt.setTypeface(font);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switchToMainMenuActivity();
+            }
+        }, 3000);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -39,8 +49,8 @@ public class MainMenuActivity extends Activity {
         }
     }
 
-    public void switchToGameActivity(View view) {
-        Intent intent = new Intent(this, GameActivity.class);
+    public void switchToMainMenuActivity() {
+        Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);
     }
 

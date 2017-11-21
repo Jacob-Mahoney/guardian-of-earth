@@ -1,8 +1,8 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.particles;
 
 public class Meteor extends Particle {
 
-    Meteor(int x, int y, int dx, int dy) {
+    public Meteor(int x, int y, int dx, int dy) {
 
         super(x, y, dx, dy, 50, 50);
 

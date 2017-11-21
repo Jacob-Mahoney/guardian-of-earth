@@ -1,10 +1,14 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.basic_game_objects;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+
+import jacobmahoney.guardianofearth.utility.Utility;
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 
 public class SideButton implements UpdateableGameObject, DrawableGameObject {
 

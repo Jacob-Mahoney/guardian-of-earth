@@ -1,4 +1,4 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.utility;
 
 import android.content.Context;
 import android.content.res.AssetManager;

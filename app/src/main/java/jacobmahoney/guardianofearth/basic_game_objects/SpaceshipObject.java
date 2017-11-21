@@ -1,8 +1,12 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.basic_game_objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+
+import jacobmahoney.guardianofearth.activities.GameActivity;
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 
 public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject {
 

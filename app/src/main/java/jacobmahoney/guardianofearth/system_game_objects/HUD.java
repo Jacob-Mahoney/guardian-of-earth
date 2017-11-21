@@ -1,6 +1,11 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.system_game_objects;
 
 import android.graphics.Canvas;
+
+import jacobmahoney.guardianofearth.canvas.CanvasText;
+import jacobmahoney.guardianofearth.game.GameController;
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
+import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 
 public class HUD implements UpdateableGameObject, DrawableGameObject {
 
@@ -9,8 +14,8 @@ public class HUD implements UpdateableGameObject, DrawableGameObject {
 
     public HUD() {
 
-        score = new CanvasText("", CanvasText.HorizontalAlignment.LEFT, CanvasText.VerticleAlignment.TOP);
-        lives = new CanvasText("", CanvasText.HorizontalAlignment.RIGHT, CanvasText.VerticleAlignment.TOP);
+        score = new CanvasText("", CanvasText.HorizontalAlignment.LEFT, CanvasText.VerticalAlignment.TOP);
+        lives = new CanvasText("", CanvasText.HorizontalAlignment.RIGHT, CanvasText.VerticalAlignment.TOP);
 
     }
 

@@ -1,23 +1,25 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.canvas;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 
+import jacobmahoney.guardianofearth.activities.LoadingActivity;
+
 public class CanvasText {
 
     public enum HorizontalAlignment {LEFT, CENTER, RIGHT}
-    public enum VerticleAlignment {TOP, CENTER, BOTTOM}
+    public enum VerticalAlignment {TOP, CENTER, BOTTOM}
 
     private String text;
     private Point pos;
     private HorizontalAlignment ha;
-    private VerticleAlignment va;
+    private VerticalAlignment va;
     private Paint paint;
     private Rect bounds;
 
-    public CanvasText(String text, HorizontalAlignment ha, VerticleAlignment va) {
+    public CanvasText(String text, HorizontalAlignment ha, VerticalAlignment va) {
 
         this.text = text;
         this.ha = ha;

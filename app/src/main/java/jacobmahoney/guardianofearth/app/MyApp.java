@@ -1,4 +1,4 @@
-package jacobmahoney.guardianofearth;
+package jacobmahoney.guardianofearth.app;
 
 import android.app.Application;
 import android.content.Context;
