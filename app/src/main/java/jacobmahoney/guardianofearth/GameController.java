@@ -208,7 +208,9 @@ public class GameController implements Observer {
                 case METEOR_DESTROYED: {
                     score += 10;
                     Point p = particleHandler.getLastDestroyedMeteorLocation();
-                    newPopupText("+10", p.x, p.y, smallTextSize, 750);
+                    if (p != null) {
+                        newPopupText("+10", p.x, p.y, smallTextSize, 750);
+                    }
                     break;
                 }
                 case METEOR_HIT_EARTH: {
