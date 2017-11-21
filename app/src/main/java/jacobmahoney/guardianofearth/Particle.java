@@ -19,6 +19,14 @@ public abstract class Particle extends RectF {
 
     }
 
+    public int getX() {
+        return (int) (left + width()/2);
+    }
+
+    public int getY() {
+        return (int) (top + height()/2);
+    }
+
     public void update() {
         this.left += dx;
         this.right += dx;

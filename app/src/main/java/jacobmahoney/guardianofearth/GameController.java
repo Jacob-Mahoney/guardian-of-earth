@@ -28,6 +28,7 @@ public class GameController implements Observer {
     private int currentWave;
 
     private int screenWidth, screenHeight;
+    private float smallTextSize, largeTextSize;
 
     private final int LASER_SPEED = 15;
     private static int score, lives;
@@ -36,6 +37,9 @@ public class GameController implements Observer {
 
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+
+        this.smallTextSize = 0.025f * screenWidth;
+        this.largeTextSize = 0.04f * screenWidth;
 
         spaceship = new SpaceshipObject();
         leftButton = new SideButton(SideButton.Side.LEFT_SIDE);
@@ -70,17 +74,20 @@ public class GameController implements Observer {
         waves.get(currentWave).start();
 
         status = Status.WAVE_IN_PROGRESS;
-        PopupText text = new PopupText(waves.get(currentWave).getName(), screenWidth/2, screenHeight/2, 0.04f * screenWidth, 3000);
-        screenDrawer.registerDrawableGameObject(text);
+        newPopupText(waves.get(currentWave).getName(), screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
+    }
+
+    private void newPopupText(String text, int x, int y, float textSize, int length) {
+        PopupText popupText = new PopupText(text, x, y, textSize, length);
+        screenDrawer.registerDrawableGameObject(popupText);
     }
 
     private void endGame(String message) {
 
         screenDrawer.unRegisterAll();
 
-        PopupText text = new PopupText(message, screenWidth/2, screenHeight/2, 0.04f * screenWidth, 3000);
-        screenDrawer.registerDrawableGameObject(text);
+        newPopupText(message, screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -200,6 +207,8 @@ public class GameController implements Observer {
                 }
                 case METEOR_DESTROYED: {
                     score += 10;
+                    Point p = particleHandler.getLastDestroyedMeteorLocation();
+                    newPopupText("+10", p.x, p.y, smallTextSize, 750);
                     break;
                 }
                 case METEOR_HIT_EARTH: {

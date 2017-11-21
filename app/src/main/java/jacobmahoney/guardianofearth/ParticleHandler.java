@@ -3,6 +3,8 @@ package jacobmahoney.guardianofearth;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,12 +17,14 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
     private List<Particle> particles;
     private List<Meteor> meteors;
     private Paint paint;
+    private Point lastDestroyedMeteorLocation;
 
     public ParticleHandler() {
 
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
+        lastDestroyedMeteorLocation = null;
 
         particles = new CopyOnWriteArrayList<>();
         meteors = new CopyOnWriteArrayList<>();
@@ -34,12 +38,16 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
         }
     }
 
-    // make function for getting the last meteor destroyed or the position of it
-    // so when game controller gets that event, it can call the function
-    // to display a popup text at that meteor's location
+    public Point getLastDestroyedMeteorLocation() {
+        return lastDestroyedMeteorLocation;
+    }
 
-    // also could make function for getting the last meteor that hit earth
-    // for the same reason
+    public void setLastDestroyedMeteorLocation(int x, int y) {
+        if (lastDestroyedMeteorLocation == null) {
+            lastDestroyedMeteorLocation = new Point();
+        }
+        lastDestroyedMeteorLocation.set(x, y);
+    }
 
     private Meteor checkCollisions(Particle laser) {
 
@@ -48,6 +56,7 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
         while (iter.hasNext()) { // looping through all meteors
             m = iter.next();
             if (m.intersect(laser)) {
+                setLastDestroyedMeteorLocation(m.getX(), m.getY());
                 setChanged();
                 notifyObservers(GameController.Event.METEOR_DESTROYED);
                 return m;
