@@ -89,7 +89,7 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
 
         canvas.save();
         canvas.rotate(rotation, pivot.x, pivot.y);
-        canvas.drawBitmap(GameActivity.SPACESHIP_BITMAP, position.x, position.y, null);
+        canvas.drawBitmap(bitmap, position.x, position.y, null);
         canvas.restore();
 
     }

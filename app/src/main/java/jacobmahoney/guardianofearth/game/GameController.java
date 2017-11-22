@@ -10,15 +10,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import jacobmahoney.guardianofearth.utility.Utility;
-import jacobmahoney.guardianofearth.basic_game_objects.Wave;
+import jacobmahoney.guardianofearth.basic_game_objects.*;
+import jacobmahoney.guardianofearth.system_game_objects.*;
 import jacobmahoney.guardianofearth.activities.GameActivity;
-import jacobmahoney.guardianofearth.basic_game_objects.PopupText;
-import jacobmahoney.guardianofearth.basic_game_objects.SideButton;
-import jacobmahoney.guardianofearth.basic_game_objects.SpaceshipObject;
 import jacobmahoney.guardianofearth.particles.Laser;
-import jacobmahoney.guardianofearth.system_game_objects.HUD;
-import jacobmahoney.guardianofearth.system_game_objects.ParticleHandler;
+import jacobmahoney.guardianofearth.utility.Utility;
 
 public class GameController implements Observer {
 
@@ -29,6 +25,7 @@ public class GameController implements Observer {
     private Status status;
 
     private SpaceshipObject spaceship;
+    private Earth earth;
     private SideButton leftButton;
     private SideButton rightButton;
     private HUD hud;
@@ -53,6 +50,7 @@ public class GameController implements Observer {
         this.largeTextSize = 0.04f * screenWidth;
 
         spaceship = new SpaceshipObject();
+        earth = new Earth();
         leftButton = new SideButton(SideButton.Side.LEFT_SIDE);
         rightButton = new SideButton(SideButton.Side.RIGHT_SIDE);
         hud = new HUD();
@@ -134,6 +132,9 @@ public class GameController implements Observer {
 
         screenDrawer.registerUpdateableGameObject(spaceship);
         screenDrawer.registerDrawableGameObject(spaceship);
+
+        screenDrawer.registerUpdateableGameObject(earth);
+        screenDrawer.registerDrawableGameObject(earth);
 
         screenDrawer.registerUpdateableGameObject(leftButton);
         screenDrawer.registerDrawableGameObject(leftButton);

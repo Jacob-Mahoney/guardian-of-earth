@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,17 +60,6 @@ public class Utility {
         }
 
         return bitmap;
-
-    }
-
-    public static Point getCenteredTextPosition(int screenWidth, int screenHeight, Paint paint) {
-
-        Point p = new Point();
-
-        p.x = screenWidth / 2;
-        p.y = (int) ((screenHeight / 2) - ((paint.descent() + paint.ascent()) / 2));
-
-        return p;
 
     }
 

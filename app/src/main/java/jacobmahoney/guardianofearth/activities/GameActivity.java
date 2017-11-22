@@ -15,6 +15,7 @@ import jacobmahoney.guardianofearth.utility.Utility;
 public class GameActivity extends Activity {
 
     public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/spaceship.png");
+    public static Bitmap EARTH_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/earth.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
