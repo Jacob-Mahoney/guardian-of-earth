@@ -2,6 +2,7 @@ package jacobmahoney.guardianofearth.game;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -92,6 +93,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        canvas.drawColor(Color.rgb(29, 38, 46));
         gameController.drawGameObjects(canvas);
     }
 

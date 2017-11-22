@@ -130,6 +130,8 @@ public class GameController implements Observer {
 
     private void registerGameObjects() {
 
+        // registering game objects so they can be drawn/updated on screen using screenDrawer
+
         screenDrawer.registerUpdateableGameObject(spaceship);
         screenDrawer.registerDrawableGameObject(spaceship);
 
@@ -150,13 +152,14 @@ public class GameController implements Observer {
     private void spaceshipFire() {
 
         // using utility function to determine the nose of the spaceship based on current rotation of the spaceship
-        double rot = 90 - spaceship.getRotation();
         Point spaceshipNose = Utility.rotateAboutPoint(spaceship.getNosePoint(), spaceship.getPivotPoint(), Math.toRadians(spaceship.getRotation()));
 
         // calculating x and y components of velocity for the laser based on spaceship rotation
+        double rot = 90 - spaceship.getRotation();
         int dx = (int) (LASER_SPEED * Math.cos(Math.toRadians(rot)));
         int dy = -(int) (LASER_SPEED * Math.sin(Math.toRadians(rot)));
 
+        // adding laser particle at the location of the spaceship nose
         particleHandler.addParticle(new Laser(spaceshipNose.x, spaceshipNose.y, dx, dy));
 
     }

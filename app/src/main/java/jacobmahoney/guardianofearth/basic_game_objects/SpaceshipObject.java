@@ -3,6 +3,7 @@ package jacobmahoney.guardianofearth.basic_game_objects;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 
 import jacobmahoney.guardianofearth.activities.GameActivity;
 import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
@@ -16,11 +17,15 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
     private enum Status { ROTATING_LEFT, NOT_ROTATING, ROTATING_RIGHT }
     private Status status;
 
+    private long timeUntilNextLeftRotate, timeUntilNextRightRotate;
+
     public SpaceshipObject() {
 
         bitmap = GameActivity.SPACESHIP_BITMAP;
         rotation = 0;
         status = Status.NOT_ROTATING;
+        timeUntilNextLeftRotate = System.currentTimeMillis();
+        timeUntilNextRightRotate = System.currentTimeMillis();
 
         position = new Point();
         nose = new Point();
@@ -57,20 +62,23 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
 
         int middleX = screenWidth / 2;
 
-        position.set(middleX - bitmap.getWidth()/2, screenHeight - 20 - bitmap.getHeight());
-        nose.set(middleX, screenHeight - 20 - bitmap.getHeight());
-        pivot.set(middleX, screenHeight - 20);
-
-        // need to make rotation based on constant speed
-        // right now if fps is lower, then spaceship will rotate slower
+        position.set(middleX - bitmap.getWidth()/2, screenHeight - 130 - bitmap.getHeight());
+        nose.set(middleX, screenHeight - 130 - bitmap.getHeight());
+        pivot.set(middleX, screenHeight - 130);
 
         if (status == Status.ROTATING_LEFT) {
-            if ((rotation-3) > -60) {
-                rotation -= 3;
+            if (System.currentTimeMillis() >= timeUntilNextLeftRotate) {
+                if ((rotation-2.5) > -90) {
+                    rotation -= 2.5;
+                }
+                timeUntilNextLeftRotate = System.currentTimeMillis() + 5;
             }
         } else if (status == Status.ROTATING_RIGHT) {
-            if ((rotation+3) < 60) {
-                rotation += 3;
+            if (System.currentTimeMillis() >= timeUntilNextRightRotate) {
+                if ((rotation+2.5) < 90) {
+                    rotation += 2.5;
+                }
+                timeUntilNextRightRotate = System.currentTimeMillis() + 5;
             }
         }
 
