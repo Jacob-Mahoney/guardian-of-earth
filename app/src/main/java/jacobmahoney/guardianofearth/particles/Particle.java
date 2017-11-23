@@ -1,37 +1,44 @@
 package jacobmahoney.guardianofearth.particles;
 
-import android.graphics.RectF;
+import android.graphics.Rect;
 
-public abstract class Particle extends RectF {
+import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
 
-    private int dx, dy;
+public abstract class Particle implements DrawableGameObject {
+
+    private int dx, dy, width, height;
+    protected Rect rect;
 
     public Particle(int x, int y, int dx, int dy, int width, int height) {
 
         this.dx = dx;
         this.dy = dy;
+        this.width = width;
+        this.height = height;
+
+        rect = new Rect();
 
         // centering particle around point
-        this.left = x - width/2;
-        this.top = y - height/2;
-        this.right = x + width/2;
-        this.bottom = y + height/2;
+        rect.left = x - width/2;
+        rect.top = y - height/2;
+        rect.right = x + width/2;
+        rect.bottom = y + height/2;
 
     }
 
     public int getX() {
-        return (int) (left + width()/2);
+        return (rect.left + width/2);
     }
 
     public int getY() {
-        return (int) (top + height()/2);
+        return (rect.top + height/2);
     }
 
     public void update() {
-        this.left += dx;
-        this.right += dx;
-        this.top += dy;
-        this.bottom += dy;
+        rect.left += dx;
+        rect.right += dx;
+        rect.top += dy;
+        rect.bottom += dy;
     }
 
     public abstract boolean offscreen(int screenWidth, int screenHeight);

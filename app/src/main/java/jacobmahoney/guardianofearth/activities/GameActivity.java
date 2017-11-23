@@ -16,6 +16,9 @@ public class GameActivity extends Activity {
 
     public static Bitmap SPACESHIP_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/spaceship.png");
     public static Bitmap EARTH_BITMAP = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/earth.png");
+    public static Bitmap METEOR1 = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/meteor1.png");
+    public static Bitmap METEOR2 = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/meteor2.png");
+    public static Bitmap METEOR3 = Utility.getBitmapFromAsset(MyApp.getAppContext(), "game objects/meteor3.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,8 +1,12 @@
 package jacobmahoney.guardianofearth.basic_game_objects;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import java.util.Observable;
 import java.util.Random;
 
+import jacobmahoney.guardianofearth.activities.GameActivity;
 import jacobmahoney.guardianofearth.game.GameController;
 import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 import jacobmahoney.guardianofearth.particles.Meteor;
@@ -53,25 +57,32 @@ public class Wave extends Observable implements UpdateableGameObject {
 
                     counter++;
 
-                    Random r;
-                    int min, max, rand;
+                    Random r = new Random();
 
+                    // getting x and y components of random speed
                     double x = Math.random() * screenWidth;
-                    double y = -50;
+                    int y = -50;
 
-                    r = new Random();
-                    min = minRate;
-                    max = maxRate;
-                    rand = r.nextInt(max-min) + min;
-                    time += rand;
+                    time += r.nextInt(maxRate-minRate+1) + minRate; // setting the time for the next meteor to fall
 
-                    r = new Random();
-                    min = minSpeed;
-                    max = maxSpeed;
-                    rand = r.nextInt(max-min) + min;
+                    int speed = r.nextInt(maxSpeed-minSpeed+1) + minSpeed; // getting random speed for meteor
+
+                    int bitmapNum = r.nextInt(3) + 1;
+                    Bitmap bitmap;
+                    if (bitmapNum == 1) {
+                        bitmap = GameActivity.METEOR1;
+                    } else if (bitmapNum == 2) {
+                        bitmap = GameActivity.METEOR2;
+                    } else {
+                        bitmap = GameActivity.METEOR3;
+                    }
+
+                    float scale = (r.nextInt(31) + 50) / 100f;
+
+                    Log.d("Wave", "bitmapNum: " + bitmapNum + " scale: " + scale);
 
                     setChanged();
-                    notifyObservers(new Meteor((int)x, (int)y, 0, rand));
+                    notifyObservers(new Meteor((int)x, y, 0, speed, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
 
                 }
 

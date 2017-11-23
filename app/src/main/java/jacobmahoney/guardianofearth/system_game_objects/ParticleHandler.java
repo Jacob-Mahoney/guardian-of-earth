@@ -1,9 +1,8 @@
 package jacobmahoney.guardianofearth.system_game_objects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -23,14 +22,10 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
 
     private List<Particle> particles;
     private List<Meteor> meteors;
-    private Paint paint;
     private Point lastDestroyedMeteorLocation;
 
     public ParticleHandler() {
 
-        paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
         lastDestroyedMeteorLocation = null;
 
         particles = new CopyOnWriteArrayList<>();
@@ -56,7 +51,7 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
         lastDestroyedMeteorLocation.set(x, y);
     }
 
-    private Meteor checkCollisions(Particle laser) {
+    private Meteor checkCollisions(Laser laser) {
 
         Iterator<Meteor> iter = meteors.iterator();
         Meteor m;
@@ -86,7 +81,7 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
             p = iter.next();
             p.update();
             if (p instanceof Laser) {
-                Meteor m = checkCollisions(p); // returns the collided-with meteor if there was a collision, null if not
+                Meteor m = checkCollisions((Laser) p); // returns the collided-with meteor if there was a collision, null if not
                 if (m != null) {
                     particlesToRemove.add(p);
                     particlesToRemove.add(m);
@@ -117,7 +112,8 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
     @Override
     public void draw(Canvas canvas) {
         for (int i = 0; i < particles.size(); i++) {
-            canvas.drawRect(particles.get(i), paint);
+            particles.get(i).draw(canvas);
+            //canvas.drawRect(particles.get(i), paint);
         }
     }
 
