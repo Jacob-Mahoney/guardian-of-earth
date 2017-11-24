@@ -2,14 +2,13 @@ package jacobmahoney.guardianofearth.basic_game_objects;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-
 import java.util.Observable;
-import java.util.Random;
 
 import jacobmahoney.guardianofearth.activities.GameActivity;
 import jacobmahoney.guardianofearth.game.GameController;
 import jacobmahoney.guardianofearth.interfaces.UpdateableGameObject;
 import jacobmahoney.guardianofearth.particles.Meteor;
+import jacobmahoney.guardianofearth.utility.Utility;
 
 public class Wave extends Observable implements UpdateableGameObject {
 
@@ -42,6 +41,22 @@ public class Wave extends Observable implements UpdateableGameObject {
         timeUntilStart = System.currentTimeMillis() + 3000;
     }
 
+    // add random rotation to meteors as they fall
+    // public static Bitmap RotateBitmap(Bitmap source, float angle) {
+    //     Matrix matrix = new Matrix();
+    //     matrix.postRotate(angle);
+    //     return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    // }
+
+    // in meteor constructor (maybe?) add a formula to calculate it's point worth
+    // based on speed and size
+
+    // change look of spaceship
+    // look up low poly spaceship on google images
+
+    // change look of earth
+    // not sure what to
+
     @Override
     public void update(int screenWidth, int screenHeight) {
 
@@ -57,17 +72,11 @@ public class Wave extends Observable implements UpdateableGameObject {
 
                     counter++;
 
-                    Random r = new Random();
+                    time += Utility.getRandomNumberBetweenTwoNumbers(minRate, maxRate); // setting the time for the next meteor to fall
 
-                    // getting x and y components of random speed
-                    double x = Math.random() * screenWidth;
-                    int y = -50;
+                    float speed = Utility.getRandomNumberBetweenTwoNumbers(minSpeed*100, maxSpeed*100) / 100f; // getting random speed for meteor
 
-                    time += r.nextInt(maxRate-minRate+1) + minRate; // setting the time for the next meteor to fall
-
-                    int speed = r.nextInt(maxSpeed-minSpeed+1) + minSpeed; // getting random speed for meteor
-
-                    int bitmapNum = r.nextInt(3) + 1;
+                    int bitmapNum = Utility.getRandomNumberBetweenTwoNumbers(1, 3);
                     Bitmap bitmap;
                     if (bitmapNum == 1) {
                         bitmap = GameActivity.METEOR1;
@@ -77,12 +86,22 @@ public class Wave extends Observable implements UpdateableGameObject {
                         bitmap = GameActivity.METEOR3;
                     }
 
-                    float scale = (r.nextInt(31) + 50) / 100f;
+                    float scale = Utility.getRandomNumberBetweenTwoNumbers(50, 80) / 100f;
 
-                    Log.d("Wave", "bitmapNum: " + bitmapNum + " scale: " + scale);
+                    // getting x coord of starting and ending location of meteor
+                    double min = 0.1*screenWidth;
+                    double max = 0.9*screenWidth;
+                    double x1 = Utility.getRandomNumberBetweenTwoNumbers((int)min, (int)max);
+                    double x2 = Utility.getRandomNumberBetweenTwoNumbers((int)min, (int)max);
+
+                    double angle = Math.atan((x2-x1)/(screenHeight+100));
+                    double dx = speed*Math.sin(angle);
+                    double dy = speed*Math.cos(angle);
+
+                    Log.d("Wave", "" + speed);
 
                     setChanged();
-                    notifyObservers(new Meteor((int)x, y, 0, speed, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
+                    notifyObservers(new Meteor((int)x1, -100, (int)dx, (int)dy, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
 
                 }
 

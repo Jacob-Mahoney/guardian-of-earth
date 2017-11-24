@@ -110,18 +110,25 @@ public class GameController implements Observer {
 
     private void initializeWaves() {
 
-        // String name, int minRate, int maxRate, int minSpeed, int maxSpeed, int numberOfMeteors
-
         for (int i = 0; i < NUMBER_OF_WAVES; i++) {
+
             String name = "Wave " + (i+1);
             if (i+1 == NUMBER_OF_WAVES) {
                 name += " (last wave)";
             }
-            Wave wave = new Wave(name, 1000, 3000, 2, 4, i+6);
+
+            int minRate = 2600-i*200;
+            int maxRate = 4600-i*200;
+            int minSpeed = i+1;
+            int maxSpeed = i+2;
+            int numberOfMeteors = i+8;
+
+            Wave wave = new Wave(name, minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors);
             wave.addObserver(this);
             wave.addObserver(particleHandler);
             screenDrawer.registerUpdateableGameObject(wave);
             waves.add(wave);
+
         }
 
     }

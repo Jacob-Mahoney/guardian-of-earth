@@ -14,6 +14,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 public class Utility {
 
@@ -32,6 +33,14 @@ public class Utility {
         p.y = (int)y;
 
         return p;
+
+    }
+
+    public static int getRandomNumberBetweenTwoNumbers(int min, int max) {
+
+        Random r = new Random();
+
+        return r.nextInt(max-min+1) + min;
 
     }
 

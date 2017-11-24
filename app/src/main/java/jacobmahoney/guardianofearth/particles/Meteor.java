@@ -3,7 +3,6 @@ package jacobmahoney.guardianofearth.particles;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class Meteor extends Particle {
 
@@ -13,8 +12,6 @@ public class Meteor extends Particle {
 
         super(x, y, dx, dy, Math.round(bitmap.getWidth()*scale), Math.round(bitmap.getHeight()*scale));
         this.bitmap = bitmap;
-
-        Log.d("Meteor", Math.round(bitmap.getWidth()*scale) + " x " + Math.round(bitmap.getHeight()*scale));
 
     }
 
