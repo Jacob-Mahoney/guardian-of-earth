@@ -1,22 +1,23 @@
 package jacobmahoney.guardianofearth.particles;
 
-import android.graphics.Rect;
+import android.graphics.RectF;
 
 import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
 
 public abstract class Particle implements DrawableGameObject {
 
-    private int dx, dy, width, height;
-    protected Rect rect;
+    private float dx, dy;
+    private int width, height;
+    protected RectF rect;
 
-    public Particle(int x, int y, int dx, int dy, int width, int height) {
+    public Particle(int x, int y, float dx, float dy, int width, int height) {
 
         this.dx = dx;
         this.dy = dy;
         this.width = width;
         this.height = height;
 
-        rect = new Rect();
+        rect = new RectF();
 
         // centering particle around point
         rect.left = x - width/2;
@@ -27,11 +28,11 @@ public abstract class Particle implements DrawableGameObject {
     }
 
     public int getX() {
-        return (rect.left + width/2);
+        return (int)(rect.left + width/2);
     }
 
     public int getY() {
-        return (rect.top + height/2);
+        return (int)(rect.top + height/2);
     }
 
     public void update() {

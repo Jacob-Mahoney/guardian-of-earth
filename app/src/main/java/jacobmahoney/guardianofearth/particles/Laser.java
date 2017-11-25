@@ -8,7 +8,7 @@ public class Laser extends Particle {
 
     private Paint paint;
 
-    public Laser(int x, int y, int dx, int dy) {
+    public Laser(int x, int y, float dx, float dy) {
 
         super(x, y, dx, dy, 12, 12);
 

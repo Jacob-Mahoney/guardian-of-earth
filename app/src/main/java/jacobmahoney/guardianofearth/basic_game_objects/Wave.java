@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth.basic_game_objects;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import java.util.Observable;
 
 import jacobmahoney.guardianofearth.activities.GameActivity;
@@ -70,8 +69,6 @@ public class Wave extends Observable implements UpdateableGameObject {
 
                 if (System.currentTimeMillis() > time) {
 
-                    counter++;
-
                     time += Utility.getRandomNumberBetweenTwoNumbers(minRate, maxRate); // setting the time for the next meteor to fall
 
                     float speed = Utility.getRandomNumberBetweenTwoNumbers(minSpeed*100, maxSpeed*100) / 100f; // getting random speed for meteor
@@ -98,10 +95,10 @@ public class Wave extends Observable implements UpdateableGameObject {
                     double dx = speed*Math.sin(angle);
                     double dy = speed*Math.cos(angle);
 
-                    Log.d("Wave", "" + speed);
-
                     setChanged();
-                    notifyObservers(new Meteor((int)x1, -100, (int)dx, (int)dy, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
+                    notifyObservers(new Meteor((int)x1, -100, (float)dx, (float)dy, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
+
+                    counter++;
 
                 }
 
