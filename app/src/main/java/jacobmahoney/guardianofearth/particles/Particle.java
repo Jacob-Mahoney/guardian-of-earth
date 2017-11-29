@@ -7,7 +7,7 @@ import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
 public abstract class Particle implements DrawableGameObject {
 
     private float dx, dy;
-    private int width, height;
+    protected int width, height;
     protected RectF rect;
 
     public Particle(int x, int y, float dx, float dy, int width, int height) {

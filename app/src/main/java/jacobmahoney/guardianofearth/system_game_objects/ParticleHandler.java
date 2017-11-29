@@ -22,11 +22,9 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
 
     private List<Particle> particles;
     private List<Meteor> meteors;
-    private Point lastDestroyedMeteorLocation;
+    private Meteor lastDestroyedMeteor;
 
     public ParticleHandler() {
-
-        lastDestroyedMeteorLocation = null;
 
         particles = new CopyOnWriteArrayList<>();
         meteors = new CopyOnWriteArrayList<>();
@@ -40,15 +38,8 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
         }
     }
 
-    public Point getLastDestroyedMeteorLocation() {
-        return lastDestroyedMeteorLocation;
-    }
-
-    public void setLastDestroyedMeteorLocation(int x, int y) {
-        if (lastDestroyedMeteorLocation == null) {
-            lastDestroyedMeteorLocation = new Point();
-        }
-        lastDestroyedMeteorLocation.set(x, y);
+    public Meteor getLastDestroyedMeteor() {
+        return lastDestroyedMeteor;
     }
 
     private Meteor checkCollisions(Laser laser) {
@@ -58,7 +49,7 @@ public class ParticleHandler extends Observable implements UpdateableGameObject,
         while (iter.hasNext()) { // looping through all meteors
             m = iter.next();
             if (m.intersect(laser)) {
-                setLastDestroyedMeteorLocation(m.getX(), m.getY());
+                lastDestroyedMeteor = m;
                 setChanged();
                 notifyObservers(GameController.Event.METEOR_DESTROYED);
                 return m;

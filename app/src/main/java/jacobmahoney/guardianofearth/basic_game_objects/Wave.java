@@ -47,9 +47,6 @@ public class Wave extends Observable implements UpdateableGameObject {
     //     return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     // }
 
-    // in meteor constructor (maybe?) add a formula to calculate it's point worth
-    // based on speed and size
-
     // change look of spaceship
     // look up low poly spaceship on google images
 
@@ -73,6 +70,7 @@ public class Wave extends Observable implements UpdateableGameObject {
 
                     float speed = Utility.getRandomNumberBetweenTwoNumbers(minSpeed*100, maxSpeed*100) / 100f; // getting random speed for meteor
 
+                    // randomly choosing which meteor asset to use
                     int bitmapNum = Utility.getRandomNumberBetweenTwoNumbers(1, 3);
                     Bitmap bitmap;
                     if (bitmapNum == 1) {
@@ -83,9 +81,10 @@ public class Wave extends Observable implements UpdateableGameObject {
                         bitmap = GameActivity.METEOR3;
                     }
 
+                    // getting scale of meteor
                     float scale = Utility.getRandomNumberBetweenTwoNumbers(50, 80) / 100f;
 
-                    // getting x coord of starting and ending location of meteor
+                    // getting x coords of starting and ending location of meteor
                     double min = 0.1*screenWidth;
                     double max = 0.9*screenWidth;
                     double x1 = Utility.getRandomNumberBetweenTwoNumbers((int)min, (int)max);
@@ -96,7 +95,7 @@ public class Wave extends Observable implements UpdateableGameObject {
                     double dy = speed*Math.cos(angle);
 
                     setChanged();
-                    notifyObservers(new Meteor((int)x1, -100, (float)dx, (float)dy, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
+                    notifyObservers(new Meteor((int)x1, -100, speed, (float)dx, (float)dy, bitmap, scale)); // notifying particlehandler that a meteor needs to spawn at this location
 
                     counter++;
 

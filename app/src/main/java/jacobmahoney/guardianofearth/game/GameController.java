@@ -11,6 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import jacobmahoney.guardianofearth.basic_game_objects.*;
+import jacobmahoney.guardianofearth.particles.Meteor;
 import jacobmahoney.guardianofearth.system_game_objects.*;
 import jacobmahoney.guardianofearth.activities.GameActivity;
 import jacobmahoney.guardianofearth.particles.Laser;
@@ -41,7 +42,7 @@ public class GameController implements Observer {
     private final int LASER_SPEED = 15;
     private static int score, lives;
 
-    GameController(int screenWidth, int screenHeight) {
+    public GameController(int screenWidth, int screenHeight) {
 
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -228,10 +229,12 @@ public class GameController implements Observer {
                     break;
                 }
                 case METEOR_DESTROYED: {
-                    score += 10;
-                    Point p = particleHandler.getLastDestroyedMeteorLocation();
+                    Meteor m = particleHandler.getLastDestroyedMeteor();
+                    Point p = m.getLocation();
+                    int pointWorth = m.getPointWorth();
+                    score += pointWorth;
                     if (p != null) {
-                        newPopupText("+10", p.x, p.y, smallTextSize, 750);
+                        newPopupText("+" + pointWorth, p.x, p.y, smallTextSize, 750);
                     }
                     break;
                 }
