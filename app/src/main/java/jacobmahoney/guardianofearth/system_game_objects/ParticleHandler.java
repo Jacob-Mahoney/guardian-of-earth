@@ -1,8 +1,6 @@
 package jacobmahoney.guardianofearth.system_game_objects;
 
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.Rect;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -22,12 +22,19 @@ public class Utility {
 
     }
 
-    public static Point rotateAboutPoint(Point point, Point pivot, double angle) {
+    /**
+     *
+     * @param target Point the point of interest
+     * @param pivot Point the point you would like target to rotate around
+     * @param angle double the angle in radians
+     * @return a new point rotated from the target about the pivot
+     */
+    public static Point rotateAboutPoint(Point target, Point pivot, double angle) {
 
         Point p = new Point();
 
-        double x = Math.cos(angle) * (point.x - pivot.x) - Math.sin(angle) * (point.y - pivot.y) + pivot.x;
-        double y = Math.sin(angle) * (point.x - pivot.x) + Math.cos(angle) * (point.y - pivot.y) + pivot.y;
+        double x = Math.cos(angle) * (target.x - pivot.x) - Math.sin(angle) * (target.y - pivot.y) + pivot.x;
+        double y = Math.sin(angle) * (target.x - pivot.x) + Math.cos(angle) * (target.y - pivot.y) + pivot.y;
 
         p.x = (int)x;
         p.y = (int)y;
@@ -36,6 +43,12 @@ public class Utility {
 
     }
 
+    /**
+     *
+     * @param min int the lower bound
+     * @param max int the upper bound
+     * @return a random integer between the two bounds (inclusive)
+     */
     public static int getRandomNumberBetweenTwoNumbers(int min, int max) {
 
         Random r = new Random();
@@ -44,6 +57,11 @@ public class Utility {
 
     }
 
+    /**
+     *
+     * @param path Path the path of interest
+     * @return a region generated from the path
+     */
     public static Region getRegionFromPath(Path path) {
 
         RectF rectF = new RectF();
@@ -55,20 +73,20 @@ public class Utility {
 
     }
 
-    public static Bitmap getBitmapFromAsset(Context context, String filePath) {
+    /**
+     *
+     * @param context Context context of the app
+     * @param filePath String the path to the file in assets
+     * @return a bitmap of the asset
+     * @throws IOException a problem occurred while trying to open the file from the path
+     */
+    public static Bitmap getBitmapFromAsset(Context context, String filePath) throws IOException {
 
         AssetManager assetManager = context.getAssets();
 
         InputStream istr;
-        Bitmap bitmap = null;
-        try {
-            istr = assetManager.open(filePath);
-            bitmap = BitmapFactory.decodeStream(istr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bitmap;
+        istr = assetManager.open(filePath);
+        return BitmapFactory.decodeStream(istr);
 
     }
 
