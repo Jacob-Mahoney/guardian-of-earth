@@ -49,6 +49,10 @@ public class SpaceshipObject implements UpdateableGameObject, DrawableGameObject
         return rotation;
     }
 
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
     public Point getNosePoint() {
         return nose;
     }

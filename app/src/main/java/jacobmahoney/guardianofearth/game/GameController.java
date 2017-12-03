@@ -18,7 +18,7 @@ import jacobmahoney.guardianofearth.utility.Utility;
 public class GameController implements Observer {
 
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
-    private enum Status {WAVE_IN_PROGRESS, WAVE_DONE_EMITTING, DEAD, DONE}
+    private enum Status {SHOWING_TUTORIAL, WAITING_TO_BEGIN, WAVE_IN_PROGRESS, WAVE_DONE_EMITTING, DEAD}
     private Status status;
 
     private SpaceshipObject spaceship;
@@ -33,6 +33,7 @@ public class GameController implements Observer {
 
     private int screenWidth, screenHeight;
     private float smallTextSize, largeTextSize;
+    private PopupText centerPopupText;
 
     private final int LASER_SPEED = 15;
     private static int score, lives;
@@ -52,15 +53,15 @@ public class GameController implements Observer {
         hud = new HUD();
         screenDrawer = new ScreenDrawer(screenWidth, screenHeight);
         particleHandler = new ParticleHandler();
-
         particleHandler.addObserver(this);
+
         registerGameObjects();
 
         score = 0;
         lives = 3;
 
         currentWaveNumber = -1;
-        startNextWave();
+        showTutorial();
 
     }
 
@@ -72,18 +73,80 @@ public class GameController implements Observer {
         return lives;
     }
 
-    private void newPopupText(String text, int x, int y, float textSize, int timeLength) {
+    private void newCenterText(String text, int x, int y, float textSize, int timeLength) {
 
-        final PopupText popupText = new PopupText(text, x, y, textSize);
+        screenDrawer.unRegisterDrawableGameObject(centerPopupText);
+        centerPopupText = new PopupText(text, x, y, textSize, timeLength);
+        screenDrawer.registerDrawableGameObject(centerPopupText);
+
+    }
+
+    private void newPointText(String text, int x, int y, float textSize, int timeLength) {
+
+        PopupText popupText = new PopupText(text, x, y, textSize, timeLength);
         screenDrawer.registerDrawableGameObject(popupText);
 
+    }
+
+    private void showTutorial() {
+
+        status = Status.SHOWING_TUTORIAL;
+
+        leftButton.active();
+        spaceship.rotateLeft();
+        newCenterText("Press on the sides of the screen to rotate the spaceship", screenWidth/2, screenHeight/2, smallTextSize, 4000);
+
         final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() { // after time length, remove popuptext from screen
+
+        handler.postDelayed(new Runnable() { // after 2 seconds do...
             @Override
             public void run() {
-                screenDrawer.unRegisterDrawableGameObject(popupText);
+                leftButton.inactive();
+                rightButton.active();
+                spaceship.setRotation(0);
+                spaceship.rotateRight();
             }
-        }, timeLength);
+        }, 2000);
+
+        handler.postDelayed(new Runnable() { // after 4 seconds do...
+            @Override
+            public void run() {
+                rightButton.inactive();
+                spaceship.rotateStop();
+                spaceship.setRotation(0);
+                newCenterText("Press anywhere else on the screen to fire", screenWidth/2, screenHeight/2, smallTextSize, 2500);
+                spaceshipFire();
+            }
+        }, 4000);
+
+        handler.postDelayed(new Runnable() { // after 4.25 seconds do...
+            @Override
+            public void run() {
+                spaceshipFire();
+            }
+        }, 4500);
+
+        handler.postDelayed(new Runnable() { // after 4.5 seconds do...
+            @Override
+            public void run() {
+                spaceshipFire();
+            }
+        }, 5000);
+
+        handler.postDelayed(new Runnable() { // after 6.5 seconds do...
+            @Override
+            public void run() {
+                newCenterText("Destroy the meteors before they hit earth", screenWidth/2, screenHeight/2, smallTextSize, 2500);
+            }
+        }, 6500);
+
+        handler.postDelayed(new Runnable() { // after 9 seconds do...
+            @Override
+            public void run() {
+                newCenterText("Press to begin", screenWidth/2, screenHeight/2, largeTextSize, -1);
+                status = Status.WAITING_TO_BEGIN;
+            }
+        }, 9000);
 
     }
 
@@ -107,7 +170,7 @@ public class GameController implements Observer {
         newWave.start();
 
         status = Status.WAVE_IN_PROGRESS;
-        newPopupText(newWave.getName(), screenWidth/2, screenHeight/2, largeTextSize, 3000);
+        newCenterText(newWave.getName(), screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
     }
 
@@ -115,7 +178,7 @@ public class GameController implements Observer {
 
         screenDrawer.unRegisterAll();
 
-        newPopupText(message, screenWidth/2, screenHeight/2, largeTextSize, 3000);
+        newCenterText(message, screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() { // after 3 seconds, switch back to main menu
@@ -170,16 +233,20 @@ public class GameController implements Observer {
 
         // called when user presses down on the screen, x and y location passed in
 
-        if (leftButton.contains(x, y)) {
-            spaceship.rotateLeft();
-            leftButton.active();
-        }
-        else if (rightButton.contains(x, y)) {
-            spaceship.rotateRight();
-            rightButton.active();
-        }
-        else {
-            spaceshipFire();
+        if (status == Status.WAVE_IN_PROGRESS || status == Status.WAVE_DONE_EMITTING) {
+            if (leftButton.contains(x, y)) {
+                spaceship.rotateLeft();
+                leftButton.active();
+            }
+            else if (rightButton.contains(x, y)) {
+                spaceship.rotateRight();
+                rightButton.active();
+            }
+            else {
+                spaceshipFire();
+            }
+        } else if (status == Status.WAITING_TO_BEGIN) {
+            startNextWave();
         }
 
     }
@@ -188,13 +255,15 @@ public class GameController implements Observer {
 
         // called when user releases press on the screen, x and y location passed in
 
-        if (leftButton.contains(x, y)) {
-            spaceship.rotateStop();
-            leftButton.inactive();
-        }
-        else if (rightButton.contains(x, y)) {
-            spaceship.rotateStop();
-            rightButton.inactive();
+        if (status == Status.WAVE_IN_PROGRESS || status == Status.WAVE_DONE_EMITTING) {
+            if (leftButton.contains(x, y)) {
+                spaceship.rotateStop();
+                leftButton.inactive();
+            }
+            else if (rightButton.contains(x, y)) {
+                spaceship.rotateStop();
+                rightButton.inactive();
+            }
         }
 
     }
@@ -227,7 +296,7 @@ public class GameController implements Observer {
                     int pointWorth = m.getPointWorth();
                     score += pointWorth;
                     if (p != null) {
-                        newPopupText("+" + pointWorth, p.x, p.y, smallTextSize, 750);
+                        newPointText("+" + pointWorth, p.x, p.y, smallTextSize, 750);
                     }
                     break;
                 }

@@ -1,7 +1,6 @@
 package jacobmahoney.guardianofearth.game;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
@@ -56,12 +55,6 @@ public class MainThread extends Thread {
             num++;
 
             if (System.currentTimeMillis() >= time) {
-                if (System.currentTimeMillis() != startTime) {
-                    avg = (num) / ( (System.currentTimeMillis() - startTime) / 1000);
-                    Log.d("MainThread", Math.round(avg) + " FPS");
-                } else {
-                    Log.d("MainThread", "0 FPS");
-                }
                 time += 1000;
             }
 
