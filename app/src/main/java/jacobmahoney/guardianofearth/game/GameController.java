@@ -74,7 +74,7 @@ public class GameController implements Observer {
 
     private void newPopupText(String text, int x, int y, float textSize, int timeLength) {
 
-        final PopupText popupText = new PopupText(text, x, y, textSize, timeLength);
+        final PopupText popupText = new PopupText(text, x, y, textSize);
         screenDrawer.registerDrawableGameObject(popupText);
 
         final Handler handler = new Handler(Looper.getMainLooper());
