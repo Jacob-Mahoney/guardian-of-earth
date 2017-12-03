@@ -24,6 +24,10 @@ public class ScreenDrawer {
         drawableGameObjects.clear();
     }
 
+    public void unRegisterDrawableGameObject(DrawableGameObject drawableGameObject) {
+        drawableGameObjects.remove(drawableGameObject);
+    }
+
     public void registerUpdateableGameObject(UpdateableGameObject updateableGameObject) {
         updateableGameObjects.add(updateableGameObject);
     }

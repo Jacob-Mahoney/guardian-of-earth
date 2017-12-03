@@ -9,12 +9,10 @@ import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
 public class PopupText implements DrawableGameObject {
 
     private CanvasText canvasText;
-    private long stopTime;
 
-    public PopupText(String text, int x, int y, float textSize, int length) {
+    public PopupText(String text, int x, int y, float textSize) {
 
         canvasText = new CanvasText(text, CanvasText.HorizontalAlignment.CENTER, CanvasText.VerticalAlignment.CENTER);
-        stopTime = System.currentTimeMillis() + length;
 
         canvasText.setTextSize(textSize);
         canvasText.setX(x);
@@ -24,9 +22,7 @@ public class PopupText implements DrawableGameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        if (System.currentTimeMillis() <= stopTime) {
-            canvas.drawText(canvasText.getText(), canvasText.getX(), canvasText.getY(), canvasText.getPaint());
-        }
+        canvas.drawText(canvasText.getText(), canvasText.getX(), canvasText.getY(), canvasText.getPaint());
     }
 
 }

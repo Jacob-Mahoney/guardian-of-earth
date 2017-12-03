@@ -1,6 +1,7 @@
 package jacobmahoney.guardianofearth.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
+
+import jacobmahoney.guardianofearth.app.MyApp;
 
 public class Utility {
 
@@ -78,14 +81,13 @@ public class Utility {
      * @param context Context context of the app
      * @param filePath String the path to the file in assets
      * @return a bitmap of the asset
-     * @throws IOException a problem occurred while trying to open the file from the path
+     * @throws IOException if the asset is not found
      */
     public static Bitmap getBitmapFromAsset(Context context, String filePath) throws IOException {
 
         AssetManager assetManager = context.getAssets();
 
-        InputStream istr;
-        istr = assetManager.open(filePath);
+        InputStream istr = assetManager.open(filePath);
         return BitmapFactory.decodeStream(istr);
 
     }

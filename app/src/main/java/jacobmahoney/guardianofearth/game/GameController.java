@@ -5,8 +5,6 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,8 +16,6 @@ import jacobmahoney.guardianofearth.particles.Laser;
 import jacobmahoney.guardianofearth.utility.Utility;
 
 public class GameController implements Observer {
-
-    private final int NUMBER_OF_WAVES = 10;
 
     public enum Event {METEOR_HIT_EARTH, METEOR_DESTROYED, METEORS_DONE_EMITTING, NO_METEORS_ON_SCREEN}
     private enum Status {WAVE_IN_PROGRESS, WAVE_DONE_EMITTING, DEAD, DONE}
@@ -33,8 +29,7 @@ public class GameController implements Observer {
     private ScreenDrawer screenDrawer;
     private ParticleHandler particleHandler;
 
-    private List<Wave> waves = new LinkedList<>();
-    private int currentWave;
+    private int currentWaveNumber;
 
     private int screenWidth, screenHeight;
     private float smallTextSize, largeTextSize;
@@ -61,11 +56,10 @@ public class GameController implements Observer {
         particleHandler.addObserver(this);
         registerGameObjects();
 
-        lives = 3;
-        currentWave = -1;
         score = 0;
+        lives = 3;
 
-        initializeWaves();
+        currentWaveNumber = -1;
         startNextWave();
 
     }
@@ -78,19 +72,43 @@ public class GameController implements Observer {
         return lives;
     }
 
-    private void startNextWave() {
+    private void newPopupText(String text, int x, int y, float textSize, int timeLength) {
 
-        currentWave++;
-        waves.get(currentWave).start();
+        final PopupText popupText = new PopupText(text, x, y, textSize, timeLength);
+        screenDrawer.registerDrawableGameObject(popupText);
 
-        status = Status.WAVE_IN_PROGRESS;
-        newPopupText(waves.get(currentWave).getName(), screenWidth/2, screenHeight/2, largeTextSize, 3000);
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() { // after time length, remove popuptext from screen
+            @Override
+            public void run() {
+                screenDrawer.unRegisterDrawableGameObject(popupText);
+            }
+        }, timeLength);
 
     }
 
-    private void newPopupText(String text, int x, int y, float textSize, int length) {
-        PopupText popupText = new PopupText(text, x, y, textSize, length);
-        screenDrawer.registerDrawableGameObject(popupText);
+    private void startNextWave() {
+
+        currentWaveNumber++;
+
+        String name = "Wave " + (currentWaveNumber+1);
+        int minRate = 2600-currentWaveNumber*200;
+        int maxRate = 4600-currentWaveNumber*200;
+        int minSpeed = currentWaveNumber+1;
+        int maxSpeed = currentWaveNumber+2;
+        int numberOfMeteors = currentWaveNumber+8;
+
+        Wave newWave = new Wave(name, minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors);
+
+        newWave.addObserver(this);
+        newWave.addObserver(particleHandler);
+        screenDrawer.registerUpdateableGameObject(newWave);
+
+        newWave.start();
+
+        status = Status.WAVE_IN_PROGRESS;
+        newPopupText(newWave.getName(), screenWidth/2, screenHeight/2, largeTextSize, 3000);
+
     }
 
     private void endGame(String message) {
@@ -100,37 +118,12 @@ public class GameController implements Observer {
         newPopupText(message, screenWidth/2, screenHeight/2, largeTextSize, 3000);
 
         final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() { // after 3 seconds, switch back to main menu
             @Override
             public void run() {
                 GameActivity.switchToMainMenuActivity();
             }
         }, 3000);
-
-    }
-
-    private void initializeWaves() {
-
-        for (int i = 0; i < NUMBER_OF_WAVES; i++) {
-
-            String name = "Wave " + (i+1);
-            if (i+1 == NUMBER_OF_WAVES) {
-                name += " (last wave)";
-            }
-
-            int minRate = 2600-i*200;
-            int maxRate = 4600-i*200;
-            int minSpeed = i+1;
-            int maxSpeed = i+2;
-            int numberOfMeteors = i+8;
-
-            Wave wave = new Wave(name, minRate, maxRate, minSpeed, maxSpeed, numberOfMeteors);
-            wave.addObserver(this);
-            wave.addObserver(particleHandler);
-            screenDrawer.registerUpdateableGameObject(wave);
-            waves.add(wave);
-
-        }
 
     }
 
@@ -150,11 +143,11 @@ public class GameController implements Observer {
         screenDrawer.registerUpdateableGameObject(rightButton);
         screenDrawer.registerDrawableGameObject(rightButton);
 
-        screenDrawer.registerUpdateableGameObject(hud);
-        screenDrawer.registerDrawableGameObject(hud);
-
         screenDrawer.registerUpdateableGameObject(particleHandler);
         screenDrawer.registerDrawableGameObject(particleHandler);
+
+        screenDrawer.registerUpdateableGameObject(hud);
+        screenDrawer.registerDrawableGameObject(hud);
 
     }
 
@@ -248,13 +241,7 @@ public class GameController implements Observer {
                 }
                 case NO_METEORS_ON_SCREEN: {
                     if (status == Status.WAVE_DONE_EMITTING) {
-                        if (currentWave+1 <= NUMBER_OF_WAVES) {
-                            startNextWave();
-                        } else {
-                            //Log.d("GameController", "game is finished!");
-                            status = Status.DONE;
-                            endGame("You won! (Final score: " + score + ")");
-                        }
+                        startNextWave();
                     }
                     break;
                 }
