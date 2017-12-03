@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import jacobmahoney.guardianofearth.canvas.CanvasText;
 import jacobmahoney.guardianofearth.interfaces.DrawableGameObject;
 
-// text to be drawn to the canvas at a specific location for a specified amount of time
+// text to be drawn to the canvas at a specific location
 public class PopupText implements DrawableGameObject {
 
     private CanvasText canvasText;
