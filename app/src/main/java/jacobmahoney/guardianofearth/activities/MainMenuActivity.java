@@ -24,8 +24,6 @@ public class MainMenuActivity extends Activity {
         txt.setTypeface(LoadingActivity.font);
         txt = findViewById(R.id.play_game);
         txt.setTypeface(LoadingActivity.font);
-        txt = findViewById(R.id.settings);
-        txt.setTypeface(LoadingActivity.font);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 

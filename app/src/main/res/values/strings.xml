@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">GUARDIAN OF EARTH</string>
     <string name="play_game">PLAY GAME</string>
-    <string name="settings">SETTINGS</string>
     <string name="loading">LOADING...</string>
 </resources>
